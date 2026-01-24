@@ -1,12 +1,14 @@
 const UAParser = require("ua-parser-js");
 
-function processUserAgent(userAgent: string) {
+import type { IUserAgentInfo } from "../types/types";
+
+function processUserAgent(userAgent: string): IUserAgentInfo {
     const parser = new UAParser(userAgent);
     const result = parser.getResult();
 
-    let deviceType = "desktop";
-    if (result.device.type === "mobile") deviceType = "mobile";
-    else if (result.device.type === "tablet") deviceType = "tablet";
+    let deviceType: "Mobile" | "Tablet" | "Desktop" = "Desktop";
+    if (result.device.type === "mobile") deviceType = "Mobile";
+    else if (result.device.type === "tablet") deviceType = "Tablet";
 
     return {
         browser: result.browser.name ?? null,
