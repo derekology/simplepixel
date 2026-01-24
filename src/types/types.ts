@@ -9,6 +9,7 @@ export interface IPixelEvent {
     os?: string | null;
     device_type?: "Mobile" | "Tablet" | "Desktop" | null;
     params?: Record<string, string>;
+    notes?: string | null;
 }
 
 export interface IPixel {

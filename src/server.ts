@@ -1,18 +1,17 @@
 const express = require("express");
 const repository = require("./repos/sqlite3");
-const setupDatabase = require("./lib/dbSetup");
 const { v4: uuidv4 } = require("uuid");
 
 const { processIp } = require("./lib/ip");
 const { processUserAgent } = require("./lib/userAgent");
+const { MAX_PARAMS } = require("./lib/schema");
 
 import type { Request, Response } from "express";
 import type { IPixel, IPixelEvent, IIpInfo, IUserAgentInfo } from "./types/types";
 
-setupDatabase();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
+const HOST_NAME = process.env.HOST_NAME || "localhost";
 
 const PIXEL_BUFFER = Buffer.from(
     "R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=",
@@ -38,7 +37,23 @@ app.get("/p/:id.gif", (req: Request, res: Response) => {
         const { ipHash, country, region } = processIp(ip) as IIpInfo;
         const { browser, os, deviceType } = processUserAgent(userAgent) as IUserAgentInfo;
 
-        const paramsJSON = JSON.stringify(req.query);
+        const queryParams = req.query;
+        const paramKeys = Object.keys(queryParams);
+        const paramCount = paramKeys.length;
+
+        let notesArray: string[] = [];
+        let limitedParams = queryParams;
+
+        if (paramCount > MAX_PARAMS) {
+            const limitedKeys = paramKeys.slice(0, MAX_PARAMS);
+            limitedParams = limitedKeys.reduce((acc, key) => {
+                acc[key] = queryParams[key];
+                return acc;
+            }, {} as Record<string, any>);
+            notesArray.push(`Only first ${MAX_PARAMS} of ${paramCount} params saved`);
+        }
+
+        const paramsJSON = JSON.stringify(limitedParams);
 
         const event: Omit<IPixelEvent, 'id' | 'params'> & { params: string } = {
             pixel_id: pixelId,
@@ -49,7 +64,8 @@ app.get("/p/:id.gif", (req: Request, res: Response) => {
             browser,
             os,
             device_type: deviceType,
-            params: paramsJSON
+            params: paramsJSON,
+            notes: notesArray.length > 0 ? notesArray.join("; ") : null
         };
 
         repository.createEvent(event);
@@ -67,10 +83,10 @@ app.post("/create-pixel", (req: Request, res: Response) => {
 
     repository.createPixel(pixelId, now, expires);
 
-    const pixelUrl = `https://yourdomain.com/p/${pixelId}.gif`;
+    const pixelUrl = `https://${HOST_NAME}/p/${pixelId}.gif`;
     res.json({ pixelId, url: pixelUrl });
 });
 
 app.listen(PORT, () => {
-    console.log(`Simple Pixel server running on http://localhost:${PORT}`);
+    console.log(`Simple Pixel server running on http://${HOST_NAME}:${PORT}`);
 });

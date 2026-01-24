@@ -32,8 +32,9 @@ class SqliteRepository implements PixelRepository {
                 browser,
                 os,
                 device_type,
-                params
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                params,
+                notes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(
             event.pixel_id,
             event.timestamp,
@@ -43,7 +44,8 @@ class SqliteRepository implements PixelRepository {
             event.browser,
             event.os,
             event.device_type,
-            event.params
+            event.params,
+            event.notes ?? null
         );
     }
 }
