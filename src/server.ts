@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("./lib/db");
+const repository = require("./repos/sqlite3");
 const setupDatabase = require("./lib/dbSetup");
 const { v4: uuidv4 } = require("uuid");
 
@@ -24,9 +24,7 @@ app.get("/p/:id.gif", (req: Request, res: Response) => {
     const pixelId = req.params.id;
     const timestamp = Date.now();
 
-    const pixel = db
-        .prepare("SELECT * FROM pixels WHERE id = ?")
-        .get(pixelId) as Pixel;
+    const pixel = repository.getPixelById(pixelId) as Pixel;
 
     if (pixel && timestamp < pixel.expires_at) {
         const ip = req.ip;
@@ -37,19 +35,7 @@ app.get("/p/:id.gif", (req: Request, res: Response) => {
 
         const paramsJSON = JSON.stringify(req.query);
 
-        db.prepare(`
-            INSERT INTO events (
-                pixel_id,
-                timestamp,
-                ip_hash,
-                country,
-                region,
-                browser,
-                os,
-                device_type,
-                params
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(
+        repository.createEvent({
             pixelId,
             timestamp,
             ipHash,
@@ -58,8 +44,8 @@ app.get("/p/:id.gif", (req: Request, res: Response) => {
             browser,
             os,
             deviceType,
-            paramsJSON
-        );
+            params: paramsJSON
+        });
     }
 
     res.setHeader("Content-Type", "image/gif");
@@ -72,9 +58,7 @@ app.post("/create-pixel", (req: Request, res: Response) => {
     const now = Date.now();
     const expires = now + 7 * 24 * 60 * 60 * 1000;
 
-    db.prepare(
-        "INSERT INTO pixels (id, created_at, expires_at) VALUES (?, ?, ?)"
-    ).run(pixelId, now, expires);
+    repository.createPixel(pixelId, now, expires);
 
     const pixelUrl = `https://yourdomain.com/p/${pixelId}.gif`;
     res.json({ pixelId, url: pixelUrl });
