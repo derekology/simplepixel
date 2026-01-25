@@ -4,7 +4,7 @@
       <Sidebar :events="stats.events" />
     </div>
     <div class="main-content">
-      <DashboardCharts :summary="stats.summary" />
+      <DashboardCharts :summary="stats.summary" :events="stats.events" />
     </div>
   </div>
 </template>

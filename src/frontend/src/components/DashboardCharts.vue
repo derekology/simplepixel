@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
-import { Chart, ArcElement, Tooltip, Legend, DoughnutController, type ChartConfiguration } from 'chart.js';
+import { Chart, ArcElement, Tooltip, Legend, DoughnutController, LineController, LineElement, PointElement, LinearScale, TimeScale, CategoryScale, type ChartConfiguration } from 'chart.js';
 import VisitorMap from './VisitorMap.vue';
 
-Chart.register(ArcElement, Tooltip, Legend, DoughnutController);
+Chart.register(ArcElement, Tooltip, Legend, DoughnutController, LineController, LineElement, PointElement, LinearScale, TimeScale, CategoryScale);
 
 interface StatsSummary {
     totalEvents: number;
@@ -17,8 +17,21 @@ interface StatsSummary {
     paramCounts: Record<string, Record<string, number>>;
 }
 
+interface PixelEvent {
+    timestamp: number;
+    isReturning: boolean;
+    country: string | null;
+    region: string | null;
+    browser: string | null;
+    os: string | null;
+    deviceType: string | null;
+    params: Record<string, any>;
+    notes: string | null;
+}
+
 const props = defineProps<{
     summary: StatsSummary;
+    events: PixelEvent[];
 }>();
 
 const eventsPerUser = computed(() => {
@@ -26,12 +39,14 @@ const eventsPerUser = computed(() => {
     return (props.summary.totalEvents / props.summary.uniqueUsers).toFixed(1);
 });
 
+const timeSeriesChart = ref<HTMLCanvasElement | null>(null);
 const userTypeChart = ref<HTMLCanvasElement | null>(null);
 const countryChart = ref<HTMLCanvasElement | null>(null);
 const deviceChart = ref<HTMLCanvasElement | null>(null);
 const osChart = ref<HTMLCanvasElement | null>(null);
 const browserChart = ref<HTMLCanvasElement | null>(null);
 
+let timeSeriesChartInstance: Chart | null = null;
 let userTypeChartInstance: Chart | null = null;
 let countryChartInstance: Chart | null = null;
 let deviceChartInstance: Chart | null = null;
@@ -103,7 +118,115 @@ function createPieChart(canvas: HTMLCanvasElement, labels: string[], data: numbe
     return new Chart(ctx, config);
 }
 
+function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], data: number[] } {
+    if (events.length === 0) return { labels: [], data: [] };
+
+    const sortedEvents = [...events].sort((a, b) => a.timestamp - b.timestamp);
+    const timeRangeMs = sortedEvents[sortedEvents.length - 1].timestamp - sortedEvents[0].timestamp;
+    
+    let intervalMs: number;
+    let formatLabel: (date: Date) => string;
+    
+    if (timeRangeMs < 3600000) {
+        intervalMs = 300000;
+        formatLabel = (date) => date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    } else if (timeRangeMs < 86400000) {
+        intervalMs = 3600000;
+        formatLabel = (date) => date.toLocaleTimeString('en-US', { hour: 'numeric' });
+    } else if (timeRangeMs < 2592000000) {
+        intervalMs = 86400000;
+        formatLabel = (date) => {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}`;
+        };
+    } else {
+        intervalMs = 2592000000;
+        formatLabel = (date) => {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getFullYear()}`;
+        };
+    }
+    
+    const firstTimestamp = sortedEvents[0].timestamp;
+    const buckets = new Map<number, number>();
+    
+    sortedEvents.forEach(event => {
+        const bucketIndex = Math.floor((event.timestamp - firstTimestamp) / intervalMs);
+        buckets.set(bucketIndex, (buckets.get(bucketIndex) || 0) + 1);
+    });
+    
+    const maxBucket = Math.max(...buckets.keys());
+    const labels: string[] = [];
+    const data: number[] = [];
+    
+    for (let i = 0; i <= maxBucket; i++) {
+        const bucketTime = firstTimestamp + (i * intervalMs);
+        labels.push(formatLabel(new Date(bucketTime)));
+        data.push(buckets.get(i) || 0);
+    }
+    
+    return { labels, data };
+}
+
+function createTimeSeriesChart(canvas: HTMLCanvasElement): Chart {
+    const ctx = canvas.getContext('2d')!;
+    const { labels, data } = groupEventsByTimeInterval(props.events);
+    
+    const config: ChartConfiguration = {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Events',
+                data,
+                borderColor: '#4a90e2',
+                backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#4a90e2'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    },
+                    grid: {
+                        color: '#e5e5e5'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    };
+    return new Chart(ctx, config);
+}
+
 function initCharts() {
+    if (timeSeriesChart.value && props.events.length > 0) {
+        timeSeriesChartInstance = createTimeSeriesChart(timeSeriesChart.value);
+    }
+
     if (userTypeChart.value && props.summary.totalEvents > 0) {
         userTypeChartInstance = createPieChart(
             userTypeChart.value,
@@ -155,6 +278,7 @@ function initCharts() {
 }
 
 function destroyCharts() {
+    timeSeriesChartInstance?.destroy();
     userTypeChartInstance?.destroy();
     countryChartInstance?.destroy();
     deviceChartInstance?.destroy();
@@ -168,7 +292,7 @@ onMounted(() => {
     });
 });
 
-watch(() => props.summary, () => {
+watch([() => props.summary, () => props.events], () => {
     destroyCharts();
     nextTick(() => {
         initCharts();
@@ -200,6 +324,13 @@ watch(() => props.summary, () => {
             <div class="stat-card">
                 <div class="stat-label">Events per User</div>
                 <div class="stat-value">{{ eventsPerUser }}</div>
+            </div>
+        </div>
+
+        <div class="time-series-container" v-if="events.length > 0">
+            <h3>Events Over Time</h3>
+            <div class="chart-wrapper">
+                <canvas ref="timeSeriesChart"></canvas>
             </div>
         </div>
 
@@ -311,6 +442,22 @@ watch(() => props.summary, () => {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     padding: 0 1rem 1rem 1rem;
+}
+
+.time-series-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 1rem 2rem 1rem;
+}
+
+.time-series-container h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: #333;
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 0.5rem;
 }
 
 .chart-container {
