@@ -46,13 +46,10 @@ onMounted(() => {
 }
 
 .sidebar {
-  width: 20%;
-  min-width: 250px;
+  width: 300px;
   height: 100vh;
   overflow-y: auto;
   border-right: 1px solid #ccc;
-  padding: 1rem;
-  background-color: #f9f9f9;
 }
 
 .main-content {
