@@ -99,7 +99,7 @@ class SqliteRepository implements IPixelRepository {
 
     getEventsByPixelId(pixelId: string): IPixelEvent[] {
         const rows = db
-            .prepare("SELECT * FROM events WHERE pixel_id = ? ORDER BY timestamp DESC")
+            .prepare("SELECT * FROM events WHERE pixel_id = ? ORDER BY timestamp ASC")
             .all(pixelId);
 
         return rows.map((row: any) => {
