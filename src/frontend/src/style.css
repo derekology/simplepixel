@@ -1,0 +1,13 @@
+:root {
+    --bg: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    margin: 0;
+}
