@@ -58,14 +58,14 @@ function closeModal() {
                 <div>
                     <span class="time">{{ formatTime(event.timestamp) }}</span>
                     <span class="date">{{ formatDate(event.timestamp) }}</span>
-                    <span v-if="!event.isReturning" class="new-user">New user</span>
                 </div>
                 <div class="indicators">
+                    <span v-if="!event.isReturning" class="new-user">New visitor</span>
                     <span v-if="event.notes" class="note-indicator" :title="event.notes">!</span>
                 </div>
             </div>
             <div class="event-details">
-                <div>{{ formatLocation(event.region, event.country) }}</div>
+                <div>📍{{ formatLocation(event.region, event.country) }}</div>
             </div>
         </div>
         <EventModal :event="selectedEvent" @close="closeModal" />
