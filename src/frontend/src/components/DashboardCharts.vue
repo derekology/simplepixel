@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import { Chart, ArcElement, Tooltip, Legend, DoughnutController, type ChartConfiguration } from 'chart.js';
+import VisitorMap from './VisitorMap.vue';
 
 Chart.register(ArcElement, Tooltip, Legend, DoughnutController);
 
@@ -177,26 +178,28 @@ watch(() => props.summary, () => {
 
 <template>
     <div class="dashboard">
+        <VisitorMap v-if="Object.keys(summary.countryCounts).length > 0" :countryCounts="summary.countryCounts" />
+        
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="stat-label">Total Visits</div>
+                <div class="stat-label">Total Events</div>
                 <div class="stat-value">{{ summary.totalEvents }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Unique Visitors</div>
+                <div class="stat-label">Unique Users</div>
                 <div class="stat-value">{{ summary.uniqueUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Avg Visits per Visitor</div>
-                <div class="stat-value">{{ eventsPerUser }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">One-time Visitors</div>
+                <div class="stat-label">New Users</div>
                 <div class="stat-value">{{ summary.newUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Returning Visitors</div>
+                <div class="stat-label">Returning Users</div>
                 <div class="stat-value">{{ summary.returningUsers }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Events per User</div>
+                <div class="stat-value">{{ eventsPerUser }}</div>
             </div>
         </div>
 
@@ -241,7 +244,7 @@ watch(() => props.summary, () => {
 
 <style scoped>
 .dashboard {
-    padding: 1rem;
+    display: flex;
     flex-direction: column;
 }
 
@@ -249,7 +252,7 @@ watch(() => props.summary, () => {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin: 0 1rem 2rem 1rem;
 }
 
 .stat-card {
@@ -307,6 +310,7 @@ watch(() => props.summary, () => {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
+    padding: 0 1rem 1rem 1rem;
 }
 
 .chart-container {
