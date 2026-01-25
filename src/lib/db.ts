@@ -9,9 +9,7 @@ const db = new Database(dbPath);
 function setupDatabase() {
     console.log("Checking database schema...");
 
-    // Check and create tables with their columns
     for (const [tableName, tableSchema] of Object.entries(DB_SCHEMA.tables) as [string, { columns: Record<string, string> }][]) {
-        // Check if table exists
         const tableExists = db
             .prepare(
                 `SELECT name FROM sqlite_master WHERE type='table' AND name=?`
@@ -19,7 +17,6 @@ function setupDatabase() {
             .get(tableName);
 
         if (!tableExists) {
-            // Create table with all columns
             const columns = Object.entries(tableSchema.columns)
                 .map(([colName, colType]) => `${colName} ${colType}`)
                 .join(', ');
@@ -28,7 +25,6 @@ function setupDatabase() {
             db.exec(createTableSQL);
             console.log(`Created table: ${tableName}`);
         } else {
-            // Table exists, check for missing columns
             const existingColumns = db
                 .prepare(`PRAGMA table_info(${tableName})`)
                 .all()
@@ -40,7 +36,6 @@ function setupDatabase() {
                 if (!existingColumns.includes(colName)) {
                     const colType = tableSchema.columns[colName];
                     if (typeof colType === "string" && colType) {
-                        // Skip PRIMARY KEY and AUTOINCREMENT for ALTER TABLE
                         const cleanColType = colType
                             .replace(/PRIMARY KEY/i, '')
                             .replace(/AUTOINCREMENT/i, '')

@@ -83,8 +83,100 @@ app.post("/create-pixel", (req: Request, res: Response) => {
 
     repository.createPixel(pixelId, now, expires);
 
-    const pixelUrl = `https://${HOST_NAME}/p/${pixelId}.gif`;
-    res.json({ pixelId, url: pixelUrl });
+    const dashboardUrl = `https://${HOST_NAME}/${pixelId}`;
+
+    res.json({ url: dashboardUrl });
+});
+
+app.get("/:pixelId", (req: Request, res: Response) => {
+    const { pixelId } = req.params;
+
+    if (!pixelId) {
+        return res.status(400).json({ error: "Missing pixelId" });
+    }
+
+    const pixel = repository.getPixelById(pixelId);
+    if (!pixel) {
+        return res.status(404).json({ error: "Pixel not found" });
+    }
+
+    const events = repository.getEventsByPixelId(pixelId);
+
+    const ipCounts: Record<string, number> = {};
+    const countryCounts: Record<string, number> = {};
+    const regionCounts: Record<string, number> = {};
+    const deviceTypeCounts: Record<string, number> = {};
+    const osCounts: Record<string, number> = {};
+    const browserCounts: Record<string, number> = {};
+    const paramCounts: Record<string, Record<string, number>> = {};
+
+    const publicEvents: any[] = [];
+
+    for (const event of events) {
+        ipCounts[event.ip_hash] = (ipCounts[event.ip_hash] || 0) + 1;
+        const isReturning = (ipCounts[event.ip_hash] ?? 0) > 1;
+
+        if (event.country) {
+            countryCounts[event.country] = (countryCounts[event.country] || 0) + 1;
+        }
+
+        if (event.region) {
+            regionCounts[event.region] = (regionCounts[event.region] || 0) + 1;
+        }
+
+        if (event.device_type) {
+            deviceTypeCounts[event.device_type] =
+                (deviceTypeCounts[event.device_type] || 0) + 1;
+        }
+
+        if (event.os) {
+            osCounts[event.os] = (osCounts[event.os] || 0) + 1;
+        }
+
+        if (event.browser) {
+            browserCounts[event.browser] =
+                (browserCounts[event.browser] || 0) + 1;
+        }
+
+        const params = event.params ?? {};
+        for (const key of Object.keys(params)) {
+            paramCounts[key] = paramCounts[key] || {};
+            const value = params[key];
+            paramCounts[key][value] = (paramCounts[key][value] || 0) + 1;
+        }
+
+        publicEvents.push({
+            timestamp: event.timestamp,
+            isReturning,
+            country: event.country,
+            region: event.region,
+            browser: event.browser,
+            os: event.os,
+            deviceType: event.device_type,
+            params,
+            notes: event.notes ?? null
+        });
+    }
+
+    const uniqueUsers = Object.keys(ipCounts).length;
+    const returningUsers = Object.values(ipCounts).filter(c => c > 1).length;
+    const newUsers = uniqueUsers - returningUsers;
+
+    res.json({
+        events: publicEvents,
+        summary: {
+            totalEvents: events.length,
+            uniqueUsers,
+            newUsers,
+            returningUsers,
+            countryCounts,
+            regionCounts,
+            deviceTypeCounts,
+            osCounts,
+            browserCounts,
+            paramCounts
+        }
+    });
 });
 
 app.listen(PORT, () => {

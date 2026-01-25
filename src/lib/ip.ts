@@ -15,8 +15,8 @@ function processIp(ip: string): IIpInfo {
 
     return {
         ipHash: hashIp(ip),
-        country: geo?.country ?? null,
-        region: geo?.region ?? null
+        country: geo?.country ?? "Unknown",
+        region: geo?.region ?? "Unknown"
     };
 }
 

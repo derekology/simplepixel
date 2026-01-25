@@ -19,12 +19,46 @@ export interface IPixel {
 }
 
 export interface IUserAgentInfo {
-    browser: string | null;
-    os: string | null;
+    browser: string;
+    os: string;
     deviceType: "Mobile" | "Tablet" | "Desktop";
 }
 export interface IIpInfo {
     ipHash: string;
+    country: string;
+    region: string;
+}
+
+export interface IPixelRepository {
+    getPixelById(id: string): IPixel | undefined;
+    createPixel(id: string, createdAt: number, expiresAt: number): void;
+    createEvent(event: Omit<IPixelEvent, 'id' | 'params'> & { params: string }): void;
+    getEventsByPixelId(pixelId: string): IPixelEvent[];
+    getDistinctIpHashesByPixelId(pixelId: string): string[];
+}
+
+export interface IPixelEventPublic {
+    timestamp: number;
+    isReturning: boolean;
     country: string | null;
     region: string | null;
+    browser: string | null;
+    os: string | null;
+    deviceType: "Mobile" | "Tablet" | "Desktop" | null;
+    params: Record<string, string>;
+    notes: string | null;
+}
+
+export interface IPixelStatsSummary {
+    totalEvents: number;
+    uniqueUsers: number;
+    newUsers: number;
+    returningUsers: number;
+
+    countryCounts: Record<string, number>;
+    deviceTypeCounts: Record<string, number>;
+    osCounts: Record<string, number>;
+    browserCounts: Record<string, number>;
+
+    paramCounts: Record<string, Record<string, number>>;
 }
