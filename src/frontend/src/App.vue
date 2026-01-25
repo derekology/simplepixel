@@ -4,13 +4,14 @@
       <Sidebar :events="stats.events" />
     </div>
     <div class="main-content">
-      <!-- charts, maps, etc will go here -->
+      <DashboardCharts :summary="stats.summary" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Sidebar from './components/EventSidebar.vue';
+import DashboardCharts from './components/DashboardCharts.vue';
 import { onMounted, reactive } from 'vue';
 
 interface Stats {
@@ -26,6 +27,18 @@ const stats = reactive<Stats>({
 const initialStats: Stats = (window as any).__INITIAL_STATS__;
 const pixelId: string = (window as any).__PIXEL_ID__;
 
+function hasStatsChanged(oldStats: Stats, newStats: Stats): boolean {
+  if (oldStats.events.length !== newStats.events.length) return true;
+  if (oldStats.summary.totalEvents !== newStats.summary.totalEvents) return true;
+  
+  const oldLastEvent = oldStats.events[oldStats.events.length - 1];
+  const newLastEvent = newStats.events[newStats.events.length - 1];
+  
+  if (oldLastEvent?.timestamp !== newLastEvent?.timestamp) return true;
+  
+  return false;
+}
+
 onMounted(() => {
   stats.events = initialStats.events;
   stats.summary = initialStats.summary;
@@ -33,8 +46,11 @@ onMounted(() => {
   setInterval(async () => {
     const res = await fetch(`/stats/${pixelId}`);
     const fetchedStats = await res.json();
-    stats.events = fetchedStats.events;
-    stats.summary = fetchedStats.summary;
+    
+    if (hasStatsChanged(stats, fetchedStats)) {
+      stats.events = fetchedStats.events;
+      stats.summary = fetchedStats.summary;
+    }
   }, 5000);
 });
 </script>
@@ -54,13 +70,7 @@ onMounted(() => {
 
 .main-content {
   flex: 1;
-  padding: 1rem;
   overflow-y: auto;
-}
-
-.main-content {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
+  background-color: #f5f5f5;
 }
 </style>
