@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "better-sqlite3": "^12.6.2",
+    "ejs": "^4.0.1",
     "express": "^5.2.1",
     "geoip-lite": "^1.4.10",
+    "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.8",
     "uuidv4": "^6.2.13"
   },
