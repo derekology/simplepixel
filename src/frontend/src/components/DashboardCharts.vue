@@ -123,10 +123,10 @@ function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], da
 
     const sortedEvents = [...events].sort((a, b) => a.timestamp - b.timestamp);
     const timeRangeMs = sortedEvents[sortedEvents.length - 1].timestamp - sortedEvents[0].timestamp;
-    
+
     let intervalMs: number;
     let formatLabel: (date: Date) => string;
-    
+
     if (timeRangeMs < 3600000) {
         intervalMs = 300000;
         formatLabel = (date) => date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
@@ -146,32 +146,32 @@ function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], da
             return `${months[date.getMonth()]} ${date.getFullYear()}`;
         };
     }
-    
+
     const firstTimestamp = sortedEvents[0].timestamp;
     const buckets = new Map<number, number>();
-    
+
     sortedEvents.forEach(event => {
         const bucketIndex = Math.floor((event.timestamp - firstTimestamp) / intervalMs);
         buckets.set(bucketIndex, (buckets.get(bucketIndex) || 0) + 1);
     });
-    
+
     const maxBucket = Math.max(...buckets.keys());
     const labels: string[] = [];
     const data: number[] = [];
-    
+
     for (let i = 0; i <= maxBucket; i++) {
         const bucketTime = firstTimestamp + (i * intervalMs);
         labels.push(formatLabel(new Date(bucketTime)));
         data.push(buckets.get(i) || 0);
     }
-    
+
     return { labels, data };
 }
 
 function createTimeSeriesChart(canvas: HTMLCanvasElement): Chart {
     const ctx = canvas.getContext('2d')!;
     const { labels, data } = groupEventsByTimeInterval(props.events);
-    
+
     const config: ChartConfiguration = {
         type: 'line',
         data: {
@@ -303,27 +303,27 @@ watch([() => props.summary, () => props.events], () => {
 <template>
     <div class="dashboard">
         <VisitorMap v-if="Object.keys(summary.countryCounts).length > 0" :countryCounts="summary.countryCounts" />
-        
+
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="stat-label">Total Events</div>
+                <div class="stat-label">Total Visits</div>
                 <div class="stat-value">{{ summary.totalEvents }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Unique Users</div>
+                <div class="stat-label">Unique Visitors</div>
                 <div class="stat-value">{{ summary.uniqueUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">New Users</div>
+                <div class="stat-label">Visits per Visitor</div>
+                <div class="stat-value">{{ eventsPerUser }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">One-time Visitors</div>
                 <div class="stat-value">{{ summary.newUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Returning Users</div>
+                <div class="stat-label">Returning Visitors</div>
                 <div class="stat-value">{{ summary.returningUsers }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Events per User</div>
-                <div class="stat-value">{{ eventsPerUser }}</div>
             </div>
         </div>
 
