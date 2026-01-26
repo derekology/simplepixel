@@ -60,6 +60,7 @@ export interface IPixelStatsSummary {
     uniqueUsers: number;
     newUsers: number;
     returningUsers: number;
+    eventsPerUser: number;
 
     countryCounts: Record<string, number>;
     deviceTypeCounts: Record<string, number>;
@@ -67,4 +68,5 @@ export interface IPixelStatsSummary {
     browserCounts: Record<string, number>;
 
     paramCounts: Record<string, Record<string, number>>;
+    parameterRows: Array<{ parameter: string; value: string; count: number }>;
 }

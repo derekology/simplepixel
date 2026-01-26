@@ -10,11 +10,12 @@ interface StatsSummary {
     uniqueUsers: number;
     newUsers: number;
     returningUsers: number;
+    eventsPerUser: number;
     countryCounts: Record<string, number>;
     deviceTypeCounts: Record<string, number>;
     osCounts: Record<string, number>;
     browserCounts: Record<string, number>;
-    paramCounts: Record<string, Record<string, number>>;
+    parameterRows: Array<{ parameter: string; value: string; count: number }>;
 }
 
 interface PixelEvent {
@@ -40,11 +41,6 @@ const props = defineProps<{
     events: PixelEvent[];
     pixel: PixelMetadata;
 }>();
-
-const eventsPerUser = computed(() => {
-    if (props.summary.uniqueUsers === 0) return '0.0';
-    return (props.summary.totalEvents / props.summary.uniqueUsers).toFixed(1);
-});
 
 const timeSeriesChart = ref<HTMLCanvasElement | null>(null);
 const userTypeChart = ref<HTMLCanvasElement | null>(null);
@@ -312,24 +308,24 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="stat-label">Total Visits</div>
+                <div class="stat-label">Total Events</div>
                 <div class="stat-value">{{ summary.totalEvents }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Unique Visitors</div>
+                <div class="stat-label">Unique Users</div>
                 <div class="stat-value">{{ summary.uniqueUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Visits per Visitor</div>
-                <div class="stat-value">{{ eventsPerUser }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">One-time Visitors</div>
+                <div class="stat-label">New Users</div>
                 <div class="stat-value">{{ summary.newUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Returning Visitors</div>
+                <div class="stat-label">Returning Users</div>
                 <div class="stat-value">{{ summary.returningUsers }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Events per User</div>
+                <div class="stat-value">{{ summary.eventsPerUser }}</div>
             </div>
         </div>
 
@@ -374,6 +370,28 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
                 <div class="chart-wrapper">
                     <canvas ref="browserChart"></canvas>
                 </div>
+            </div>
+        </div>
+
+        <div class="params-table-container" v-if="summary.parameterRows.length > 0">
+            <h3>Parameters</h3>
+            <div class="table-wrapper">
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(row, index) in summary.parameterRows" :key="index">
+                            <td class="param-name">{{ row.parameter }}</td>
+                            <td class="param-value">{{ row.value }}</td>
+                            <td class="param-count">{{ row.count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -483,6 +501,68 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
     height: 300px;
 }
 
+.params-table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 1rem 2rem 1rem;
+}
+
+.params-table-container h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: #333;
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 0.5rem;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.params-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.params-table thead {
+    background-color: #f5f5f5;
+}
+
+.params-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.params-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.params-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.param-name {
+    font-weight: 600;
+    color: #000000;
+}
+
+.param-value {
+    color: #333;
+    font-family: monospace;
+}
+
+.param-count {
+    text-align: right;
+    font-weight: 600;
+    color: #666;
+}
+
 @media (max-width: 768px) {
     .charts-grid {
         grid-template-columns: 1fr;
@@ -494,6 +574,12 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
     .stat-value {
         font-size: 2rem;
+    }
+
+    .params-table th,
+    .params-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
     }
 }
 </style>

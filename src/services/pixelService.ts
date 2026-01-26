@@ -80,11 +80,13 @@ function getPixelStats(pixelId: string) {
         if (event.os) osCounts[event.os] = (osCounts[event.os] || 0) + 1;
         if (event.browser) browserCounts[event.browser] = (browserCounts[event.browser] || 0) + 1;
 
-        const params = event.params ?? {};
-        for (const key of Object.keys(params)) {
-            paramCounts[key] = paramCounts[key] || {};
-            const value = params[key];
-            paramCounts[key][value] = (paramCounts[key][value] || 0) + 1;
+        const params = event.params && typeof event.params === 'object' ? event.params : {};
+        if (params && Object.keys(params).length > 0) {
+            for (const key of Object.keys(params)) {
+                paramCounts[key] = paramCounts[key] || {};
+                const value = String(params[key]);
+                paramCounts[key][value] = (paramCounts[key][value] || 0) + 1;
+            }
         }
 
         publicEvents.push({
@@ -95,7 +97,7 @@ function getPixelStats(pixelId: string) {
             browser: event.browser,
             os: event.os,
             deviceType: event.device_type,
-            params,
+            params: params,
             notes: event.notes ?? null
         });
     }
@@ -103,6 +105,24 @@ function getPixelStats(pixelId: string) {
     const uniqueUsers = Object.keys(ipCounts).length;
     const returningUsers = Object.values(ipCounts).filter(c => c > 1).length;
     const newUsers = uniqueUsers - returningUsers;
+    const eventsPerUser = uniqueUsers > 0 ? parseFloat((events.length / uniqueUsers).toFixed(1)) : 0;
+
+    const parameterRows: Array<{ parameter: string; value: string; count: number }> = [];
+    for (const [param, valueCounts] of Object.entries(paramCounts)) {
+        for (const [value, count] of Object.entries(valueCounts)) {
+            parameterRows.push({
+                parameter: param,
+                value: value,
+                count: count as number
+            });
+        }
+    }
+    parameterRows.sort((a, b) => {
+        if (a.parameter !== b.parameter) {
+            return a.parameter.localeCompare(b.parameter);
+        }
+        return b.count - a.count;
+    });
 
     return {
         pixel: {
@@ -116,12 +136,13 @@ function getPixelStats(pixelId: string) {
             uniqueUsers,
             newUsers,
             returningUsers,
+            eventsPerUser,
             countryCounts,
             regionCounts,
             deviceTypeCounts,
             osCounts,
             browserCounts,
-            paramCounts
+            parameterRows
         }
     };
 }
