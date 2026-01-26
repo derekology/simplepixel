@@ -137,6 +137,15 @@ class SqliteRepository implements IPixelRepository {
         db.prepare("DELETE FROM events WHERE pixel_id = ?").run(id);
         db.prepare("DELETE FROM pixels WHERE id = ?").run(id);
     }
+
+    getAllPixels(): IPixel[] {
+        const rows = db.prepare("SELECT * FROM pixels").all();
+        return rows;
+    }
+
+    get db() {
+        return db;
+    }
 }
 
 setupDatabase();

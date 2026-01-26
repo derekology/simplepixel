@@ -36,6 +36,7 @@ export interface IPixelRepository {
     getEventsByPixelId(pixelId: string): IPixelEvent[];
     getDistinctIpHashesByPixelId(pixelId: string): string[];
     deletePixel(id: string): void;
+    getAllPixels(): IPixel[];
 }
 
 export interface IPixelEventPublic {

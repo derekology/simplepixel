@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 
 const { createPixel, recordPixelEvent, getPixelStats, deletePixel } = require("../services/pixelService");
+const { startCleanupService } = require("../services/cleanupService");
 
 import type { Request, Response } from "express";
 
@@ -56,5 +57,7 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
         stats: stats || null
     });
 });
+
+startCleanupService(60);
 
 app.listen(PORT, () => console.log(`Simple Pixel server running on http://${HOST_NAME}`));
