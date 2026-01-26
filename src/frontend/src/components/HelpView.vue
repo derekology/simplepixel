@@ -1,32 +1,206 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+
+const props = defineProps<{
+    pixelId?: string;
+}>();
+
+const params = ref<Array<{ key: string; value: string }>>([
+    { key: '', value: '' }
+]);
+
+const maxParams = 10;
+
+const embedUrl = computed(() => {
+    if (!props.pixelId) return '';
+
+    const baseUrl = `${window.location.origin}/p/${props.pixelId}.gif`;
+    const queryParams = params.value
+        .filter(p => p.key && p.value)
+        .map(p => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)
+        .join('&');
+
+    return queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
+});
+
+const embedCode = computed(() => {
+    return `<img src="${embedUrl.value}" width="1" height="1" style="display:none;" alt="" />`;
+});
+
+function addParam() {
+    if (params.value.length < maxParams) {
+        params.value.push({ key: '', value: '' });
+    }
+}
+
+function removeParam(index: number) {
+    if (params.value.length > 1) {
+        params.value.splice(index, 1);
+    }
+}
+
+function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
+}
+</script>
+
 <template>
     <div class="help-container">
-        <h1>Welcome to Simple Pixel</h1>
-        
+        <h1>welcome to simple pixel</h1>
+        <p class="subtitle">Privacy-first, simple visitor tracking for small businesses and individuals</p>
+
         <section class="help-section">
-            <h2>Getting Started</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <!-- <h2>Why Simple Pixel?</h2> -->
+            <div class="value-props">
+                <div class="value-prop">
+                    <div class="icon">🚀</div>
+                    <h3>Dead Simple</h3>
+                    <p>No complex setup, no accounts, no configuration. Create a pixel and start tracking in seconds.
+                        Perfect for email campaigns, landing pages, or any webpage.</p>
+                </div>
+                <div class="value-prop">
+                    <div class="icon">🔒</div>
+                    <h3>Privacy First</h3>
+                    <p>IP addresses are hashed immediately and never stored in plain text. User agent details are parsed
+                        for device type and browser, then discarded. Your visitors' privacy is protected.</p>
+                </div>
+                <!-- <div class="value-prop">
+                    <div class="icon">🏠</div>
+                    <h3>Self-Hosted</h3>
+                    <p>Keep your data yours. No sending information to big corporations. Deploy on your own server or run locally with Docker.</p>
+                </div> -->
+                <div class="value-prop">
+                    <div class="icon">📊</div>
+                    <h3>Just What You Need</h3>
+                    <p>Track visitors, device types, locations, and custom parameters. See trends over time. No bloat,
+                        no unnecessary features. Just the essentials.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="help-section" v-if="pixelId">
+            <h2>How to Use Your Pixel</h2>
+
+            <div class="step">
+                <h3>Step 1: Embed Your Pixel</h3>
+                <p>Copy the code below and paste it into your HTML, email template, or anywhere you want to track
+                    visitors:</p>
+                <div class="code-box">
+                    <code>{{ embedCode }}</code>
+                    <button class="copy-btn" @click="copyToClipboard(embedCode)">Copy</button>
+                </div>
+                <p class="note">The pixel is a transparent 1x1 image that loads invisibly when someone views your page
+                    or opens your email.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 2: Add Custom Parameters (Optional)</h3>
+                <p>Track additional information by adding parameters to your pixel URL. You can add up to {{ maxParams
+                }} parameters:</p>
+
+                <div class="params-builder">
+                    <div v-for="(param, index) in params" :key="index" class="param-row">
+                        <input v-model="param.key" type="text" placeholder="Parameter name (e.g., campaign)"
+                            class="param-input" />
+                        <span class="equals">=</span>
+                        <input v-model="param.value" type="text" placeholder="Value (e.g., summer-sale)"
+                            class="param-input" />
+                        <button v-if="params.length > 1" class="remove-btn" @click="removeParam(index)">
+                            ✕
+                        </button>
+                    </div>
+                    <button v-if="params.length < maxParams" class="add-btn" @click="addParam">
+                        + Add Parameter
+                    </button>
+                </div>
+
+                <!-- <div v-if="params.some(p => p.key && p.value)" class="generated-url">
+                    <strong>Your Pixel URL:</strong>
+                    <div class="code-box">
+                        <code>{{ embedUrl }}</code>
+                        <button class="copy-btn" @click="copyToClipboard(embedUrl)">Copy</button>
+                    </div>
+                </div> -->
+
+                <div class="examples">
+                    <h4>Example Use Cases:</h4>
+                    <ul>
+                        <li><strong>Email Campaigns:</strong> <code>campaign=newsletter&month=january</code></li>
+                        <li><strong>A/B Testing:</strong> <code>variant=a&test=homepage-hero</code></li>
+                        <li><strong>Referral Tracking:</strong> <code>source=twitter&medium=social</code></li>
+                        <li><strong>User Segments:</strong> <code>plan=premium&cohort=2024-q1</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 3: View Your Stats</h3>
+                <p>Return to this dashboard to see:</p>
+                <ul>
+                    <li>Total events and unique visitors</li>
+                    <li>Visitor locations on an interactive map</li>
+                    <li>Device types, browsers, and operating systems</li>
+                    <li>Events over time in a timeline chart</li>
+                    <li>Custom parameter values and their frequencies</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="help-section warning-section">
+            <h2>⚠️ Important: Data Retention</h2>
+            <p class="warning-text">
+                Pixels and all associated event data are <strong>automatically deleted 7 days after creation</strong>.
+                Make sure to check your stats regularly or download/export your data before it expires.
+                This ensures your data doesn't linger indefinitely and keeps the system lightweight.
+            </p>
         </section>
 
         <section class="help-section">
-            <h2>How It Works</h2>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <h2>FAQ</h2>
+
+            <div class="faq-item">
+                <h3>What data is collected?</h3>
+                <p>We collect: timestamp, hashed IP address (for uniqueness, not stored as plain IP), country/region,
+                    browser, operating system, device type, and any custom parameters you include in the pixel URL.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How does this protect privacy?</h3>
+                <p>IP addresses are immediately hashed using a one-way algorithm. We never store the original IP. User
+                    agent strings are parsed for device info and then discarded. We don't use cookies or track users
+                    across sites.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use this in emails?</h3>
+                <p>Yes, with a caveat. To use it, simply embed the pixel image in your HTML email template. Most of the
+                    time, the pixel will fire when a recipient opens the email and loads images. However, some email
+                    clients block images by default, or load them through proxy servers, which can affect tracking
+                    accuracy.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What happens after 7 days?</h3>
+                <p>The pixel and all its event data are permanently deleted. You'll need to create a new pixel if you
+                    want to continue tracking.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is there a limit on events?</h3>
+                <p>No artificial limits! Track as many events as you need within the 7-day window.</p>
+            </div>
         </section>
 
         <section class="help-section">
-            <h2>Tracking Events</h2>
-            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
-        </section>
-
-        <section class="help-section">
-            <h2>Understanding Your Data</h2>
-            <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.</p>
-            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-        </section>
-
-        <section class="help-section">
-            <h2>Need More Help?</h2>
-            <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus.</p>
+            <h2>Need Help?</h2>
+            <p>Simple Pixel is designed to be straightforward, but if you run into issues:</p>
+            <ul>
+                <li>Make sure your pixel URL is correctly embedded in your HTML</li>
+                <li>Check that image loading is enabled (some email clients block images by default)</li>
+                <li>Verify the pixel ID in your URL matches your dashboard</li>
+                <li>Remember that pixels expire after 7 days</li>
+            </ul>
         </section>
     </div>
 </template>
@@ -34,15 +208,22 @@
 <style scoped>
 .help-container {
     padding: 2rem;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .help-container h1 {
     font-size: 2.5rem;
     color: #333;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
 }
 
 .help-section {
@@ -54,21 +235,260 @@
 }
 
 .help-section h2 {
-    font-size: 1.5rem;
-    color: #4a90e2;
-    margin: 0 0 1rem 0;
-    border-bottom: 2px solid #e5e5e5;
+    font-size: 1.8rem;
+    margin: 0 0 1.5rem 0;
     padding-bottom: 0.5rem;
 }
 
-.help-section p {
+.value-props {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    /* margin-top: 1.5rem; */
+}
+
+.value-prop {
+    text-align: center;
+    padding: 1rem;
+}
+
+.value-prop .icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.value-prop h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+.value-prop p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #555;
+    margin: 0;
+}
+
+.step {
+    margin-bottom: 2rem;
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin: 0 0 0.75rem 0;
+}
+
+.step p {
     font-size: 1rem;
     line-height: 1.6;
     color: #555;
     margin-bottom: 1rem;
 }
 
-.help-section p:last-child {
+.step ul {
+    margin: 0.5rem 0 0 1.5rem;
+    color: #555;
+    line-height: 1.8;
+}
+
+.note {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+.code-box {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    position: relative;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+}
+
+.code-box code {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: #dd3333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+.copy-btn:hover {
+    background: #bb2a2a;
+}
+
+.params-builder {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.param-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.param-input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+.param-input:focus {
+    outline: none;
+    border-color: #dd3333;
+}
+
+.equals {
+    color: #999;
+    font-weight: bold;
+}
+
+.remove-btn {
+    padding: 0.4rem 0.6rem;
+    background: #dd3333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.remove-btn:hover {
+    background: #bb2a2a;
+}
+
+.add-btn {
+    padding: 0.6rem 1.2rem;
+    background: #dd3333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: #bb2a2a;
+}
+
+.generated-url {
+    margin-top: 1.5rem;
+}
+
+.generated-url strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.examples {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #e8f4f8;
+    border-radius: 6px;
+}
+
+.examples h4 {
+    margin: 0 0 0.75rem 0;
+    color: #333;
+}
+
+.examples ul {
+    margin: 0 0 0 1.5rem;
+    line-height: 2;
+}
+
+.examples code {
+    background: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #d32f2f;
+}
+
+.warning-section {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border-left: 5px solid #ff9800;
+}
+
+.warning-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333;
+    margin: 0;
+}
+
+.faq-item {
+    margin-bottom: 1.5rem;
+}
+
+.faq-item:last-child {
     margin-bottom: 0;
+}
+
+.faq-item h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+}
+
+.faq-item p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #555;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .help-container {
+        padding: 1rem;
+    }
+
+    .help-container h1 {
+        font-size: 2rem;
+    }
+
+    .value-props {
+        grid-template-columns: 1fr;
+    }
+
+    .param-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .equals {
+        display: none;
+    }
 }
 </style>

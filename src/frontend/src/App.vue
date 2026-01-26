@@ -32,7 +32,7 @@
         <Sidebar :events="stats.events" />
       </div>
       <div class="main-content">
-        <HelpView v-if="showHelp || stats.events.length === 0" />
+        <HelpView v-if="showHelp || stats.events.length === 0" :pixelId="pixelId" />
         <DashboardCharts v-else :summary="stats.summary" :events="stats.events" :pixel="stats.pixel" />
       </div>
     </div>
