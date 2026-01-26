@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 
-const { createPixel, recordPixelEvent, getPixelStats } = require("../services/pixelService");
+const { createPixel, recordPixelEvent, getPixelStats, deletePixel } = require("../services/pixelService");
 
 import type { Request, Response } from "express";
 
@@ -38,6 +38,12 @@ app.get("/stats/:pixelId", (req: Request, res: Response) => {
     const stats = getPixelStats(req.params.pixelId);
     if (!stats) return res.status(404).json({ error: "Pixel not found" });
     res.json(stats);
+});
+
+app.post("/delete/:pixelId", (req: Request, res: Response) => {
+    const deleted = deletePixel(req.params.pixelId);
+    if (!deleted) return res.status(404).json({ error: "Pixel not found" });
+    res.json({ success: true });
 });
 
 app.get("/:pixelId", async (req: Request, res: Response) => {

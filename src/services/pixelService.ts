@@ -147,8 +147,17 @@ function getPixelStats(pixelId: string) {
     };
 }
 
+function deletePixel(pixelId: string) {
+    const pixel = repository.getPixelById(pixelId);
+    if (!pixel) return false;
+    
+    repository.deletePixel(pixelId);
+    return true;
+}
+
 module.exports = {
     createPixel,
     recordPixelEvent,
-    getPixelStats
+    getPixelStats,
+    deletePixel
 };

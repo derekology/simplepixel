@@ -132,6 +132,11 @@ class SqliteRepository implements IPixelRepository {
 
         return rows.map((row: any) => row.ip_hash);
     }
+
+    deletePixel(id: string): void {
+        db.prepare("DELETE FROM events WHERE pixel_id = ?").run(id);
+        db.prepare("DELETE FROM pixels WHERE id = ?").run(id);
+    }
 }
 
 setupDatabase();

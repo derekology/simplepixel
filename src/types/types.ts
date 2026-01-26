@@ -35,6 +35,7 @@ export interface IPixelRepository {
     createEvent(event: Omit<IPixelEvent, 'id' | 'params'> & { params: string }): void;
     getEventsByPixelId(pixelId: string): IPixelEvent[];
     getDistinctIpHashesByPixelId(pixelId: string): string[];
+    deletePixel(id: string): void;
 }
 
 export interface IPixelEventPublic {

@@ -2,12 +2,29 @@
   <div class="app-container">
     <header class="top-bar">
       <h1 class="logo">simple pixel</h1>
+      <!-- <div class="nav-buttons">
+        <button class="nav-btn" @click="navigateToNewPixel" title="Create New Pixel">
+          New Pixel
+        </button>
+        <button class="nav-btn delete-btn" @click="showDeleteModal = true" title="Delete This Pixel">
+          Delete Pixel
+        </button>
+        <button class="help-button" @click="showHelp = !showHelp" :title="showHelp ? 'Back to Dashboard' : 'Help'">
+          <span v-if="showHelp">←</span>
+          <span v-else>?</span>
+        </button>
+      </div> -->
       <div class="nav">
-        <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
-          <span v-if="stats.events.length === 0"></span>
-          <span v-else-if="showHelp">stats</span>
+        <button v-if="stats.events.length > 0" class="nav-button" @click="navigateToNewPixel" title="New Pixel">new
+          pixel</button>
+        <button v-if="stats.events.length > 0" class="nav-button" @click="showHelp = !showHelp"
+          :title="showHelp ? 'Stats' : 'Help'">
+          <span v-if="showHelp">stats</span>
           <span v-else>help / about</span>
         </button>
+        <button v-if="stats.events.length > 0" class="nav-button delete-button" @click="showDeleteModal = true"
+          title="Delete Pixel">delete
+          pixel</button>
       </div>
     </header>
     <div class="dashboard">
@@ -19,6 +36,7 @@
         <DashboardCharts v-else :summary="stats.summary" :events="stats.events" :pixel="stats.pixel" />
       </div>
     </div>
+    <DeletePixelModal v-if="showDeleteModal" :pixelId="pixelId" @close="showDeleteModal = false" />
   </div>
 </template>
 
@@ -26,6 +44,7 @@
 import Sidebar from './components/EventSidebar.vue';
 import DashboardCharts from './components/DashboardCharts.vue';
 import HelpView from './components/HelpView.vue';
+import DeletePixelModal from './components/DeletePixelModal.vue';
 import { onMounted, reactive, ref } from 'vue';
 
 interface Stats {
@@ -45,6 +64,11 @@ const stats = reactive<Stats>({
 });
 
 const showHelp = ref(false);
+const showDeleteModal = ref(false);
+
+function navigateToNewPixel() {
+  window.location.href = '/create-pixel';
+}
 
 const initialStats: Stats = (window as any).__INITIAL_STATS__;
 const pixelId: string = (window as any).__PIXEL_ID__;
@@ -98,6 +122,8 @@ onMounted(() => {
 }
 
 .logo {
+  pointer-events: none;
+  user-select: none;
   margin: 0.5rem 0.75rem;
   font-size: 1.25rem;
   font-weight: 500;
@@ -106,24 +132,32 @@ onMounted(() => {
 
 .nav {
   display: flex;
+  align-items: center;
   height: 100%;
 }
 
 .nav-button {
+  min-width: 100px;
   padding: 0.5rem 0.75rem;
   height: 100%;
   border: 0;
   background: #222222;
   color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.2s;
 }
 
 .nav-button:hover {
-  background: #ffffff0c;
+  background: #444444;
+}
+
+.nav-button.delete-button {
+  background: rgba(211, 47, 47, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-button.delete-button:hover {
+  background: rgba(211, 47, 47, 0.5);
 }
 
 .dashboard {
