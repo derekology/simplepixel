@@ -25,7 +25,7 @@
       </div>
     </header>
     <div class="dashboard">
-      <div class="sidebar">
+      <div class="sidebar" v-if="stats.events.length > 0">
         <Sidebar :events="stats.events" />
       </div>
       <div class="main-content">
