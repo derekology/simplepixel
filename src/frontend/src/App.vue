@@ -2,29 +2,22 @@
   <div class="app-container">
     <header class="top-bar">
       <h1 class="logo">simple pixel</h1>
-      <!-- <div class="nav-buttons">
-        <button class="nav-btn" @click="navigateToNewPixel" title="Create New Pixel">
-          New Pixel
-        </button>
-        <button class="nav-btn delete-btn" @click="showDeleteModal = true" title="Delete This Pixel">
-          Delete Pixel
-        </button>
-        <button class="help-button" @click="showHelp = !showHelp" :title="showHelp ? 'Back to Dashboard' : 'Help'">
-          <span v-if="showHelp">←</span>
-          <span v-else>?</span>
-        </button>
-      </div> -->
       <div class="nav">
-        <button v-if="stats.events.length > 0" class="nav-button" @click="navigateToNewPixel" title="New Pixel">new
-          pixel</button>
+        <button v-if="stats.events.length > 0" class="nav-button" @click="navigateToNewPixel" title="New Pixel">
+          new pixel
+        </button>
         <button v-if="stats.events.length > 0" class="nav-button" @click="showHelp = !showHelp"
           :title="showHelp ? 'Stats' : 'Help'">
           <span v-if="showHelp">stats</span>
           <span v-else>help / about</span>
         </button>
+        <button v-if="stats.events.length > 0" class="nav-button" @click="exportToCSV" title="Export to CSV">
+          export csv
+        </button>
         <button v-if="stats.events.length > 0" class="nav-button delete-button" @click="showDeleteModal = true"
-          title="Delete Pixel">delete
-          pixel</button>
+          title="Delete Pixel">
+          delete pixel
+        </button>
       </div>
     </header>
     <div class="dashboard">
@@ -68,6 +61,104 @@ const showDeleteModal = ref(false);
 
 function navigateToNewPixel() {
   window.location.href = '/create-pixel';
+}
+
+function exportToCSV() {
+  const csvLines: string[] = [];
+
+  csvLines.push('SUMMARY DATA');
+  csvLines.push('');
+  csvLines.push(`Pixel ID,${pixelId}`);
+  csvLines.push(`Created At,${new Date(stats.pixel.createdAt).toISOString()}`);
+  csvLines.push(`Expires At,${new Date(stats.pixel.expiresAt).toISOString()}`);
+  csvLines.push(`Total Events,${stats.summary.totalEvents}`);
+  csvLines.push(`Unique Users,${stats.summary.uniqueUsers}`);
+  csvLines.push(`New Users,${stats.summary.newUsers}`);
+  csvLines.push(`Returning Users,${stats.summary.returningUsers}`);
+  csvLines.push(`Events per User,${stats.summary.eventsPerUser}`);
+  csvLines.push('');
+
+  if (Object.keys(stats.summary.countryCounts).length > 0) {
+    csvLines.push('COUNTRY DISTRIBUTION');
+    csvLines.push('Country,Count');
+    Object.entries(stats.summary.countryCounts).forEach(([country, count]) => {
+      csvLines.push(`${country},${count}`);
+    });
+    csvLines.push('');
+  }
+
+  if (Object.keys(stats.summary.deviceTypeCounts).length > 0) {
+    csvLines.push('DEVICE TYPE DISTRIBUTION');
+    csvLines.push('Device Type,Count');
+    Object.entries(stats.summary.deviceTypeCounts).forEach(([device, count]) => {
+      csvLines.push(`${device},${count}`);
+    });
+    csvLines.push('');
+  }
+
+  if (Object.keys(stats.summary.osCounts).length > 0) {
+    csvLines.push('OPERATING SYSTEM DISTRIBUTION');
+    csvLines.push('Operating System,Count');
+    Object.entries(stats.summary.osCounts).forEach(([os, count]) => {
+      csvLines.push(`${os},${count}`);
+    });
+    csvLines.push('');
+  }
+
+  if (Object.keys(stats.summary.browserCounts).length > 0) {
+    csvLines.push('BROWSER DISTRIBUTION');
+    csvLines.push('Browser,Count');
+    Object.entries(stats.summary.browserCounts).forEach(([browser, count]) => {
+      csvLines.push(`${browser},${count}`);
+    });
+    csvLines.push('');
+  }
+
+  if (stats.summary.parameterRows && stats.summary.parameterRows.length > 0) {
+    csvLines.push('PARAMETER DATA');
+    csvLines.push('Parameter,Value,Count');
+    stats.summary.parameterRows.forEach((row: any) => {
+      csvLines.push(`${row.parameter},${row.value},${row.count}`);
+    });
+    csvLines.push('');
+  }
+
+  csvLines.push('EVENT DATA');
+  csvLines.push('Timestamp,Date,Time,Is Returning,Country,Region,Browser,OS,Device Type,Notes,Parameters');
+
+  stats.events.forEach((event: any) => {
+    const timestamp = new Date(event.timestamp);
+    const dateStr = timestamp.toLocaleDateString();
+    const timeStr = timestamp.toLocaleTimeString();
+    const paramsStr = event.params ? JSON.stringify(event.params).replace(/"/g, '""') : '';
+    const notes = event.notes ? `"${event.notes.replace(/"/g, '""')}"` : '';
+
+    csvLines.push([
+      event.timestamp,
+      dateStr,
+      timeStr,
+      event.isReturning ? 'Yes' : 'No',
+      event.country || '',
+      event.region || '',
+      event.browser || '',
+      event.os || '',
+      event.deviceType || '',
+      notes,
+      `"${paramsStr}"`
+    ].join(','));
+  });
+
+  const csvContent = csvLines.join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  link.setAttribute('href', url);
+  link.setAttribute('download', `simple-pixel-${pixelId}-${Date.now()}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 const initialStats: Stats = (window as any).__INITIAL_STATS__;
