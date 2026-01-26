@@ -155,8 +155,8 @@ async function handleDelete() {
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    background-color: #fff3e0;
-    border-left: 4px solid #ff9800;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border-left: 5px solid #ff9800;
     border-radius: 4px;
     margin-bottom: 1.5rem;
 }

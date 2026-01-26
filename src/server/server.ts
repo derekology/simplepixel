@@ -53,7 +53,7 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
     const indexPath = path.join(__dirname, "../frontend/dist/index.html");
     res.render(indexPath, {
         pixelId,
-        stats
+        stats: stats || null
     });
 });
 

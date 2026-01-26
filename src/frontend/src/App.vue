@@ -1,5 +1,12 @@
 <template>
-  <div class="app-container">
+  <!-- Show mobile warning if screen is too small -->
+  <MobileWarning v-if="isMobile" />
+  
+  <!-- Show 404 if pixel not found -->
+  <NotFound v-else-if="pixelNotFound" />
+  
+  <!-- Show main app -->
+  <div v-else class="app-container">
     <header class="top-bar">
       <h1 class="logo">simple pixel</h1>
       <div class="nav">
@@ -38,7 +45,9 @@ import Sidebar from './components/EventSidebar.vue';
 import DashboardCharts from './components/DashboardCharts.vue';
 import HelpView from './components/HelpView.vue';
 import DeletePixelModal from './components/DeletePixelModal.vue';
-import { onMounted, reactive, ref } from 'vue';
+import NotFound from './components/NotFound.vue';
+import MobileWarning from './components/MobileWarning.vue';
+import { onMounted, onUnmounted, reactive, ref, computed } from 'vue';
 
 interface Stats {
   pixel: {
@@ -58,6 +67,14 @@ const stats = reactive<Stats>({
 
 const showHelp = ref(false);
 const showDeleteModal = ref(false);
+const screenWidth = ref(window.innerWidth);
+const pixelNotFound = ref(false);
+
+const isMobile = computed(() => screenWidth.value < 768);
+
+function updateScreenWidth() {
+  screenWidth.value = window.innerWidth;
+}
 
 function navigateToNewPixel() {
   window.location.href = '/create-pixel';
@@ -177,9 +194,18 @@ function hasStatsChanged(oldStats: Stats, newStats: Stats): boolean {
 }
 
 onMounted(() => {
+  // Check if pixel exists
+  if (!initialStats || !initialStats.pixel || !initialStats.pixel.id) {
+    pixelNotFound.value = true;
+    return;
+  }
+
   stats.pixel = initialStats.pixel;
   stats.events = initialStats.events;
   stats.summary = initialStats.summary;
+
+  // Add resize listener
+  window.addEventListener('resize', updateScreenWidth);
 
   setInterval(async () => {
     const res = await fetch(`/stats/${pixelId}`);
@@ -191,6 +217,10 @@ onMounted(() => {
       stats.summary = fetchedStats.summary;
     }
   }, 5000);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenWidth);
 });
 </script>
 
