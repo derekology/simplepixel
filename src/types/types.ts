@@ -49,6 +49,12 @@ export interface IPixelEventPublic {
     notes: string | null;
 }
 
+export interface IPixelMetadata {
+    id: string;
+    createdAt: number;
+    expiresAt: number;
+}
+
 export interface IPixelStatsSummary {
     totalEvents: number;
     uniqueUsers: number;

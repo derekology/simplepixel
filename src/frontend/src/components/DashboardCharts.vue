@@ -29,9 +29,16 @@ interface PixelEvent {
     notes: string | null;
 }
 
+interface PixelMetadata {
+    id: string;
+    createdAt: number;
+    expiresAt: number;
+}
+
 const props = defineProps<{
     summary: StatsSummary;
     events: PixelEvent[];
+    pixel: PixelMetadata;
 }>();
 
 const eventsPerUser = computed(() => {
@@ -118,11 +125,11 @@ function createPieChart(canvas: HTMLCanvasElement, labels: string[], data: numbe
     return new Chart(ctx, config);
 }
 
-function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], data: number[] } {
-    if (events.length === 0) return { labels: [], data: [] };
-
-    const sortedEvents = [...events].sort((a, b) => a.timestamp - b.timestamp);
-    const timeRangeMs = sortedEvents[sortedEvents.length - 1].timestamp - sortedEvents[0].timestamp;
+function groupEventsByTimeInterval(events: PixelEvent[], pixelCreatedAt: number, pixelExpiresAt: number): { labels: string[], data: number[] } {
+    const now = Date.now();
+    const startTime = pixelCreatedAt;
+    const endTime = Math.min(now, pixelExpiresAt);
+    const timeRangeMs = endTime - startTime;
 
     let intervalMs: number;
     let formatLabel: (date: Date) => string;
@@ -147,20 +154,19 @@ function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], da
         };
     }
 
-    const firstTimestamp = sortedEvents[0].timestamp;
     const buckets = new Map<number, number>();
 
-    sortedEvents.forEach(event => {
-        const bucketIndex = Math.floor((event.timestamp - firstTimestamp) / intervalMs);
+    events.forEach(event => {
+        const bucketIndex = Math.floor((event.timestamp - startTime) / intervalMs);
         buckets.set(bucketIndex, (buckets.get(bucketIndex) || 0) + 1);
     });
 
-    const maxBucket = Math.max(...buckets.keys());
+    const totalBuckets = Math.ceil((endTime - startTime) / intervalMs);
     const labels: string[] = [];
     const data: number[] = [];
 
-    for (let i = 0; i <= maxBucket; i++) {
-        const bucketTime = firstTimestamp + (i * intervalMs);
+    for (let i = 0; i < totalBuckets; i++) {
+        const bucketTime = startTime + (i * intervalMs);
         labels.push(formatLabel(new Date(bucketTime)));
         data.push(buckets.get(i) || 0);
     }
@@ -170,7 +176,7 @@ function groupEventsByTimeInterval(events: PixelEvent[]): { labels: string[], da
 
 function createTimeSeriesChart(canvas: HTMLCanvasElement): Chart {
     const ctx = canvas.getContext('2d')!;
-    const { labels, data } = groupEventsByTimeInterval(props.events);
+    const { labels, data } = groupEventsByTimeInterval(props.events, props.pixel.createdAt, props.pixel.expiresAt);
 
     const config: ChartConfiguration = {
         type: 'line',
@@ -292,7 +298,7 @@ onMounted(() => {
     });
 });
 
-watch([() => props.summary, () => props.events], () => {
+watch([() => props.summary, () => props.events, () => props.pixel], () => {
     destroyCharts();
     nextTick(() => {
         initCharts();
@@ -387,8 +393,9 @@ watch([() => props.summary, () => props.events], () => {
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    background: #ffffff;
+    color: #000000;
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -401,7 +408,7 @@ watch([() => props.summary, () => props.events], () => {
     min-width: 250px;
 }
 
-.stat-card:nth-child(2) {
+/* .stat-card:nth-child(2) {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
@@ -415,11 +422,7 @@ watch([() => props.summary, () => props.events], () => {
 
 .stat-card:nth-child(5) {
     background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-}
+} */
 
 .stat-label {
     font-size: 0.9rem;

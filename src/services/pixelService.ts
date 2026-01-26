@@ -105,6 +105,11 @@ function getPixelStats(pixelId: string) {
     const newUsers = uniqueUsers - returningUsers;
 
     return {
+        pixel: {
+            id: pixel.id,
+            createdAt: pixel.created_at,
+            expiresAt: pixel.expires_at
+        },
         events: publicEvents,
         summary: {
             totalEvents: events.length,

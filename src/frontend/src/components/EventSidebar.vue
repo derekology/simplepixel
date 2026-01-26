@@ -52,20 +52,25 @@ function closeModal() {
 
 <template>
     <div>
-        <div v-for="(event, index) in events.slice().reverse()" :key="index" class="event-card"
-            @click="openModal(event)">
-            <div class="event-header">
-                <div>
-                    <span class="time">{{ formatTime(event.timestamp) }}</span>
-                    <span class="date">{{ formatDate(event.timestamp) }}</span>
+        <div v-if="props.events.length === 0" class="no-events">
+            <p>No events yet</p>
+        </div>
+        <div v-else>
+            <div v-for="(event, index) in events.slice().reverse()" :key="index" class="event-card"
+                @click="openModal(event)">
+                <div class="event-header">
+                    <div>
+                        <span class="time">{{ formatTime(event.timestamp) }}</span>
+                        <span class="date">{{ formatDate(event.timestamp) }}</span>
+                    </div>
+                    <div class="indicators">
+                        <span v-if="!event.isReturning" class="new-user">New visitor</span>
+                        <span v-if="event.notes" class="note-indicator" :title="event.notes">!</span>
+                    </div>
                 </div>
-                <div class="indicators">
-                    <span v-if="!event.isReturning" class="new-user">New visitor</span>
-                    <span v-if="event.notes" class="note-indicator" :title="event.notes">!</span>
+                <div class="event-details">
+                    <div>📍{{ formatLocation(event.region, event.country) }}</div>
                 </div>
-            </div>
-            <div class="event-details">
-                <div>📍{{ formatLocation(event.region, event.country) }}</div>
             </div>
         </div>
         <EventModal :event="selectedEvent" @close="closeModal" />
@@ -73,6 +78,13 @@ function closeModal() {
 </template>
 
 <style scoped>
+.no-events {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
 .event-card {
     padding: 1rem 0.75rem;
     border-bottom: #ccc solid 1px;
