@@ -51,11 +51,11 @@ function closeModal() {
 </script>
 
 <template>
-    <div>
+    <div class="sidebar-container">
         <div v-if="props.events.length === 0" class="no-events">
             <p>No events yet</p>
         </div>
-        <div v-else>
+        <div v-else class="events-list">
             <div v-for="(event, index) in events.slice().reverse()" :key="index" class="event-card"
                 @click="openModal(event)">
                 <div class="event-header">
@@ -78,6 +78,11 @@ function closeModal() {
 </template>
 
 <style scoped>
+.sidebar-container {
+    padding: 0.5rem;
+    height: 100%;
+}
+
 .no-events {
     padding: 2rem 1rem;
     text-align: center;
@@ -85,31 +90,41 @@ function closeModal() {
     font-style: italic;
 }
 
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
 .event-card {
-    padding: 1rem 0.75rem;
-    border-bottom: #ccc solid 1px;
+    background: #FFFFFF;
+    padding: 0.75rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .event-card:hover {
-    background-color: #f0f0f0;
+    background-color: #EEEEEE;
 }
 
 .event-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     align-items: center;
 }
 
 .time {
     font-weight: bold;
+    font-size: 0.95rem;
+    color: #333;
 }
 
 .date {
-    margin: 0rem 0.5rem;
-    font-size: 0.85rem;
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
     color: #666;
     font-style: italic;
 }
@@ -121,29 +136,34 @@ function closeModal() {
 }
 
 .note-indicator {
-    background-color: #ff9800;
-    color: white;
+    background: linear-gradient(135deg, #ffd54f 0%, #ffca28 100%);
+    color: #333;
     font-weight: bold;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    border-radius: 2px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
     cursor: help;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 .new-user {
-    background: #dd3333c4;
-    border-radius: 3px;
-    padding: 2px 6px;
+    background: #dd3333;
+    border-radius: 4px;
+    padding: 3px 8px;
     color: white;
     font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .event-details {
     font-size: 0.85rem;
-    color: #333;
+    color: #555;
 }
 </style>

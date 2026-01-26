@@ -308,24 +308,24 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
         <div class="stats-cards">
             <div class="stat-card">
-                <div class="stat-label">Total Events</div>
+                <div class="stat-label">Total Visits</div>
                 <div class="stat-value">{{ summary.totalEvents }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Unique Users</div>
+                <div class="stat-label">Unique Visitors</div>
                 <div class="stat-value">{{ summary.uniqueUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">New Users</div>
+                <div class="stat-label">Avg Visits per Visitor</div>
+                <div class="stat-value">{{ summary.eventsPerUser }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">One-time Visitors</div>
                 <div class="stat-value">{{ summary.newUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Returning Users</div>
+                <div class="stat-label">Returning Visitors</div>
                 <div class="stat-value">{{ summary.returningUsers }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Events per User</div>
-                <div class="stat-value">{{ summary.eventsPerUser }}</div>
             </div>
         </div>
 

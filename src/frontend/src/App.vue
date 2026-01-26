@@ -1,11 +1,8 @@
 <template>
-  <!-- Show mobile warning if screen is too small -->
   <MobileWarning v-if="isMobile" />
-  
-  <!-- Show 404 if pixel not found -->
+
   <NotFound v-else-if="pixelNotFound" />
-  
-  <!-- Show main app -->
+
   <div v-else class="app-container">
     <header class="top-bar">
       <h1 class="logo">simple pixel</h1>
@@ -194,7 +191,6 @@ function hasStatsChanged(oldStats: Stats, newStats: Stats): boolean {
 }
 
 onMounted(() => {
-  // Check if pixel exists
   if (!initialStats || !initialStats.pixel || !initialStats.pixel.id) {
     pixelNotFound.value = true;
     return;
@@ -204,7 +200,6 @@ onMounted(() => {
   stats.events = initialStats.events;
   stats.summary = initialStats.summary;
 
-  // Add resize listener
   window.addEventListener('resize', updateScreenWidth);
 
   setInterval(async () => {
@@ -288,15 +283,13 @@ onUnmounted(() => {
 }
 
 .sidebar {
-  width: 300px;
+  width: 330px;
   height: 100%;
   overflow-y: auto;
-  border-right: 1px solid #ccc;
 }
 
 .main-content {
   flex: 1;
   overflow-y: auto;
-  background-color: #f5f5f5;
 }
 </style>
