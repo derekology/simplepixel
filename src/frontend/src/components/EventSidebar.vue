@@ -60,12 +60,12 @@ function closeModal() {
                 @click="openModal(event)">
                 <div class="event-header">
                     <div>
-                        <span class="time">{{ formatTime(event.timestamp) }}</span>
+                        <span class="time">{{ formatTime(event.timestamp) }}</span><br />
                         <span class="date">{{ formatDate(event.timestamp) }}</span>
                     </div>
                     <div class="indicators">
                         <span v-if="!event.isReturning" class="new-user">New visitor</span>
-                        <span v-if="event.notes" class="note-indicator" :title="event.notes">!</span>
+                        <span v-if="event.notes" class="note-indicator" :title="'Warning: ' + event.notes">!</span>
                     </div>
                 </div>
                 <div class="event-details">
@@ -123,7 +123,6 @@ function closeModal() {
 }
 
 .date {
-    margin-left: 0.5rem;
     font-size: 0.8rem;
     color: #666;
     font-style: italic;
@@ -147,7 +146,6 @@ function closeModal() {
     justify-content: center;
     font-size: 0.9rem;
     cursor: help;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
 }
 

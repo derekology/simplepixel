@@ -100,7 +100,7 @@ function formatNotes(notes: string | null) {
                         </div>
 
                         <div v-if="event.notes" class="detail-section">
-                            <h3>Notes</h3>
+                            <h3>Warnings</h3>
                             <div class="notes-content">{{ formatNotes(event.notes) }}</div>
                         </div>
                     </div>
@@ -202,7 +202,7 @@ function formatNotes(notes: string | null) {
 
 .notes-content {
     padding: 1rem;
-    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
     border-radius: 4px;
     color: #333;
     white-space: pre-wrap;

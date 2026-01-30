@@ -3,29 +3,30 @@
 
   <NotFound v-else-if="pixelNotFound" />
 
+  <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" />
+
   <div v-else class="app-container">
     <header class="top-bar">
-      <h1 class="logo">simple pixel</h1>
+      <h1 class="logo"><span class="logo-highlight">::</span>simple pixel<span class="byline" @click="goToWebsite">by
+          derekw</span></h1>
       <div class="nav">
-        <button v-if="stats.events.length > 0" class="nav-button" @click="navigateToNewPixel" title="New Pixel">
-          new pixel
-        </button>
-        <button v-if="stats.events.length > 0" class="nav-button" @click="showHelp = !showHelp"
-          :title="showHelp ? 'Stats' : 'Help'">
+        <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
           <span v-if="showHelp">stats</span>
           <span v-else>help / about</span>
         </button>
-        <button v-if="stats.events.length > 0" class="nav-button" @click="exportToCSV" title="Export to CSV">
+        <button class="nav-button" @click="navigateToNewPixel" title="New Pixel">
+          new pixel
+        </button>
+        <button class="nav-button" @click="exportToCSV" title="Export to CSV">
           export csv
         </button>
-        <button v-if="stats.events.length > 0" class="nav-button delete-button" @click="showDeleteModal = true"
-          title="Delete Pixel">
+        <button class="nav-button delete-button" @click="showDeleteModal = true" title="Delete Pixel">
           delete pixel
         </button>
       </div>
     </header>
     <div class="dashboard">
-      <div class="sidebar" v-if="stats.events.length > 0">
+      <div class="sidebar">
         <Sidebar :events="stats.events" />
       </div>
       <div class="main-content">
@@ -75,6 +76,10 @@ function updateScreenWidth() {
 
 function navigateToNewPixel() {
   window.location.href = '/create-pixel';
+}
+
+function goToWebsite() {
+  window.open('https://derekw.co/', '_blank');
 }
 
 function exportToCSV() {
@@ -246,6 +251,22 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
+.logo-highlight {
+  color: #dd3333;
+  font-weight: 900;
+  margin-right: 4px;
+  font-size: 0.75rem;
+}
+
+.byline {
+  font-size: 0.75rem;
+  color: #bbbbbb;
+  margin-left: 4px;
+  cursor: pointer;
+  pointer-events: auto;
+  font-style: italic;
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -283,7 +304,7 @@ onUnmounted(() => {
 }
 
 .sidebar {
-  width: 330px;
+  width: 280px;
   height: 100%;
   overflow-y: auto;
 }

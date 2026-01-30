@@ -316,7 +316,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
                 <div class="stat-value">{{ summary.uniqueUsers }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Avg Visits per Visitor</div>
+                <div class="stat-label">Avg Visits</div>
                 <div class="stat-value">{{ summary.eventsPerUser }}</div>
             </div>
             <div class="stat-card">
