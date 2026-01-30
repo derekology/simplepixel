@@ -57,6 +57,9 @@ interface Stats {
   summary: any;
 }
 
+const MOBILE_BREAKPOINT = 768;
+const POLL_INTERVAL = 5000;
+
 const stats = reactive<Stats>({
   pixel: { id: '', createdAt: 0, expiresAt: 0 },
   events: [],
@@ -68,7 +71,10 @@ const showDeleteModal = ref(false);
 const screenWidth = ref(window.innerWidth);
 const pixelNotFound = ref(false);
 
-const isMobile = computed(() => screenWidth.value < 768);
+const isMobile = computed(() => screenWidth.value < MOBILE_BREAKPOINT);
+
+const initialStats: Stats = (window as any).__INITIAL_STATS__;
+const pixelId: string = (window as any).__PIXEL_ID__;
 
 function updateScreenWidth() {
   screenWidth.value = window.innerWidth;
@@ -82,77 +88,65 @@ function goToWebsite() {
   window.open('https://derekw.co/', '_blank');
 }
 
-function exportToCSV() {
-  const csvLines: string[] = [];
+function escapeCSVValue(value: string): string {
+  return `"${value.replace(/"/g, '""')}"`;
+}
 
-  csvLines.push('SUMMARY DATA');
-  csvLines.push('');
-  csvLines.push(`Pixel ID,${pixelId}`);
-  csvLines.push(`Created At,${new Date(stats.pixel.createdAt).toISOString()}`);
-  csvLines.push(`Expires At,${new Date(stats.pixel.expiresAt).toISOString()}`);
-  csvLines.push(`Total Events,${stats.summary.totalEvents}`);
-  csvLines.push(`Unique Users,${stats.summary.uniqueUsers}`);
-  csvLines.push(`New Users,${stats.summary.newUsers}`);
-  csvLines.push(`Returning Users,${stats.summary.returningUsers}`);
-  csvLines.push(`Events per User,${stats.summary.eventsPerUser}`);
-  csvLines.push('');
+function addCSVSection(lines: string[], title: string, header: string, data: Record<string, any>) {
+  if (Object.keys(data).length === 0) return;
+  
+  lines.push(title);
+  lines.push(header);
+  Object.entries(data).forEach(([key, value]) => {
+    lines.push(`${key},${value}`);
+  });
+  lines.push('');
+}
 
-  if (Object.keys(stats.summary.countryCounts).length > 0) {
-    csvLines.push('COUNTRY DISTRIBUTION');
-    csvLines.push('Country,Count');
-    Object.entries(stats.summary.countryCounts).forEach(([country, count]) => {
-      csvLines.push(`${country},${count}`);
-    });
-    csvLines.push('');
-  }
+function buildSummaryCSV(lines: string[]) {
+  lines.push('SUMMARY DATA');
+  lines.push('');
+  lines.push(`Pixel ID,${pixelId}`);
+  lines.push(`Created At,${new Date(stats.pixel.createdAt).toISOString()}`);
+  lines.push(`Expires At,${new Date(stats.pixel.expiresAt).toISOString()}`);
+  lines.push(`Total Events,${stats.summary.totalEvents}`);
+  lines.push(`Unique Users,${stats.summary.uniqueUsers}`);
+  lines.push(`New Users,${stats.summary.newUsers}`);
+  lines.push(`Returning Users,${stats.summary.returningUsers}`);
+  lines.push(`Events per User,${stats.summary.eventsPerUser}`);
+  lines.push('');
+}
 
-  if (Object.keys(stats.summary.deviceTypeCounts).length > 0) {
-    csvLines.push('DEVICE TYPE DISTRIBUTION');
-    csvLines.push('Device Type,Count');
-    Object.entries(stats.summary.deviceTypeCounts).forEach(([device, count]) => {
-      csvLines.push(`${device},${count}`);
-    });
-    csvLines.push('');
-  }
+function buildDistributionCSV(lines: string[]) {
+  addCSVSection(lines, 'COUNTRY DISTRIBUTION', 'Country,Count', stats.summary.countryCounts);
+  addCSVSection(lines, 'DEVICE TYPE DISTRIBUTION', 'Device Type,Count', stats.summary.deviceTypeCounts);
+  addCSVSection(lines, 'OPERATING SYSTEM DISTRIBUTION', 'Operating System,Count', stats.summary.osCounts);
+  addCSVSection(lines, 'BROWSER DISTRIBUTION', 'Browser,Count', stats.summary.browserCounts);
+}
 
-  if (Object.keys(stats.summary.osCounts).length > 0) {
-    csvLines.push('OPERATING SYSTEM DISTRIBUTION');
-    csvLines.push('Operating System,Count');
-    Object.entries(stats.summary.osCounts).forEach(([os, count]) => {
-      csvLines.push(`${os},${count}`);
-    });
-    csvLines.push('');
-  }
+function buildParameterCSV(lines: string[]) {
+  if (!stats.summary.parameterRows || stats.summary.parameterRows.length === 0) return;
 
-  if (Object.keys(stats.summary.browserCounts).length > 0) {
-    csvLines.push('BROWSER DISTRIBUTION');
-    csvLines.push('Browser,Count');
-    Object.entries(stats.summary.browserCounts).forEach(([browser, count]) => {
-      csvLines.push(`${browser},${count}`);
-    });
-    csvLines.push('');
-  }
+  lines.push('PARAMETER DATA');
+  lines.push('Parameter,Value,Count');
+  stats.summary.parameterRows.forEach((row: any) => {
+    lines.push(`${row.parameter},${row.value},${row.count}`);
+  });
+  lines.push('');
+}
 
-  if (stats.summary.parameterRows && stats.summary.parameterRows.length > 0) {
-    csvLines.push('PARAMETER DATA');
-    csvLines.push('Parameter,Value,Count');
-    stats.summary.parameterRows.forEach((row: any) => {
-      csvLines.push(`${row.parameter},${row.value},${row.count}`);
-    });
-    csvLines.push('');
-  }
-
-  csvLines.push('EVENT DATA');
-  csvLines.push('Timestamp,Date,Time,Is Returning,Country,Region,Browser,OS,Device Type,Notes,Parameters');
+function buildEventCSV(lines: string[]) {
+  lines.push('EVENT DATA');
+  lines.push('Timestamp,Date,Time,Is Returning,Country,Region,Browser,OS,Device Type,Notes,Parameters');
 
   stats.events.forEach((event: any) => {
     const timestamp = new Date(event.timestamp);
     const dateStr = timestamp.toLocaleDateString();
     const timeStr = timestamp.toLocaleTimeString();
     const paramsStr = event.params ? JSON.stringify(event.params).replace(/"/g, '""') : '';
-    const notes = event.notes ? `"${event.notes.replace(/"/g, '""')}"` : '';
+    const notes = event.notes ? escapeCSVValue(event.notes) : '';
 
-    csvLines.push([
+    lines.push([
       event.timestamp,
       dateStr,
       timeStr,
@@ -166,22 +160,33 @@ function exportToCSV() {
       `"${paramsStr}"`
     ].join(','));
   });
+}
 
-  const csvContent = csvLines.join('\n');
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+function downloadCSV(content: string, filename: string) {
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
 
   link.setAttribute('href', url);
-  link.setAttribute('download', `simple-pixel-${pixelId}-${Date.now()}.csv`);
+  link.setAttribute('download', filename);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-const initialStats: Stats = (window as any).__INITIAL_STATS__;
-const pixelId: string = (window as any).__PIXEL_ID__;
+function exportToCSV() {
+  const csvLines: string[] = [];
+
+  buildSummaryCSV(csvLines);
+  buildDistributionCSV(csvLines);
+  buildParameterCSV(csvLines);
+  buildEventCSV(csvLines);
+
+  const csvContent = csvLines.join('\n');
+  const filename = `simple-pixel-${pixelId}-${Date.now()}.csv`;
+  downloadCSV(csvContent, filename);
+}
 
 function hasStatsChanged(oldStats: Stats, newStats: Stats): boolean {
   if (oldStats.events.length !== newStats.events.length) return true;
@@ -195,28 +200,32 @@ function hasStatsChanged(oldStats: Stats, newStats: Stats): boolean {
   return false;
 }
 
+function updateStats(newStats: Stats) {
+  stats.pixel = newStats.pixel;
+  stats.events = newStats.events;
+  stats.summary = newStats.summary;
+}
+
+async function pollStats() {
+  const res = await fetch(`/stats/${pixelId}`);
+  const fetchedStats = await res.json();
+
+  if (hasStatsChanged(stats, fetchedStats)) {
+    updateStats(fetchedStats);
+  }
+}
+
 onMounted(() => {
   if (!initialStats || !initialStats.pixel || !initialStats.pixel.id) {
     pixelNotFound.value = true;
     return;
   }
 
-  stats.pixel = initialStats.pixel;
-  stats.events = initialStats.events;
-  stats.summary = initialStats.summary;
+  updateStats(initialStats);
 
   window.addEventListener('resize', updateScreenWidth);
 
-  setInterval(async () => {
-    const res = await fetch(`/stats/${pixelId}`);
-    const fetchedStats = await res.json();
-
-    if (hasStatsChanged(stats, fetchedStats)) {
-      stats.pixel = fetchedStats.pixel;
-      stats.events = fetchedStats.events;
-      stats.summary = fetchedStats.summary;
-    }
-  }, 5000);
+  setInterval(pollStats, POLL_INTERVAL);
 });
 
 onUnmounted(() => {
