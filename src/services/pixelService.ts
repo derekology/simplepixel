@@ -7,12 +7,55 @@ const { MAX_PARAMS } = require("../lib/schema");
 
 import type { IPixelEvent, IIpInfo, IUserAgentInfo } from "../types/types";
 
+const PIXEL_EXPIRY_DAYS = 7;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
 function createPixel() {
     const pixelId = uuidv4();
     const now = Date.now();
-    const expires = now + 7 * 24 * 60 * 60 * 1000;
+    const expires = now + PIXEL_EXPIRY_DAYS * MS_PER_DAY;
     repository.createPixel(pixelId, now, expires);
     return pixelId;
+}
+
+function limitParams(queryParams: Record<string, any>) {
+    const paramKeys = Object.keys(queryParams);
+    
+    if (paramKeys.length <= MAX_PARAMS) {
+        return { params: queryParams, notes: [] };
+    }
+
+    const limitedKeys = paramKeys.slice(0, MAX_PARAMS);
+    const limitedParams = limitedKeys.reduce((acc, key) => {
+        acc[key] = queryParams[key];
+        return acc;
+    }, {} as Record<string, any>);
+
+    const notes = [`Only first ${MAX_PARAMS} of ${paramKeys.length} params saved`];
+
+    return { params: limitedParams, notes };
+}
+
+function buildEventData(
+    pixelId: string,
+    timestamp: number,
+    ipInfo: IIpInfo,
+    uaInfo: IUserAgentInfo,
+    params: Record<string, any>,
+    notes: string[]
+): Omit<IPixelEvent, "id" | "params"> & { params: string } {
+    return {
+        pixel_id: pixelId,
+        timestamp,
+        ip_hash: ipInfo.ipHash,
+        country: ipInfo.country,
+        region: ipInfo.region,
+        browser: uaInfo.browser,
+        os: uaInfo.os,
+        device_type: uaInfo.deviceType,
+        params: JSON.stringify(params),
+        notes: notes.length > 0 ? notes.join("; ") : null
+    };
 }
 
 function recordPixelEvent(pixelId: string, ip: string, userAgent: string, queryParams: Record<string, any>) {
@@ -21,38 +64,95 @@ function recordPixelEvent(pixelId: string, ip: string, userAgent: string, queryP
 
     if (!pixel || timestamp >= pixel.expires_at) return;
 
-    const { ipHash, country, region } = processIp(ip) as IIpInfo;
-    const { browser, os, deviceType } = processUserAgent(userAgent) as IUserAgentInfo;
+    const ipInfo = processIp(ip) as IIpInfo;
+    const uaInfo = processUserAgent(userAgent) as IUserAgentInfo;
+    const { params: limitedParams, notes: notesArray } = limitParams(queryParams);
 
-    const paramKeys = Object.keys(queryParams);
-    let limitedParams = queryParams;
-    let notesArray: string[] = [];
-
-    if (paramKeys.length > MAX_PARAMS) {
-        const limitedKeys = paramKeys.slice(0, MAX_PARAMS);
-        limitedParams = limitedKeys.reduce((acc, key) => {
-            acc[key] = queryParams[key];
-            return acc;
-        }, {} as Record<string, any>);
-        notesArray.push(`Only first ${MAX_PARAMS} of ${paramKeys.length} params saved`);
-    }
-
-    const paramsJSON = JSON.stringify(limitedParams);
-
-    const event: Omit<IPixelEvent, "id" | "params"> & { params: string } = {
-        pixel_id: pixelId,
-        timestamp,
-        ip_hash: ipHash,
-        country,
-        region,
-        browser,
-        os,
-        device_type: deviceType,
-        params: paramsJSON,
-        notes: notesArray.length > 0 ? notesArray.join("; ") : null
-    };
+    const event = buildEventData(pixelId, timestamp, ipInfo, uaInfo, limitedParams, notesArray);
 
     repository.createEvent(event);
+}
+
+function incrementCount(counts: Record<string, number>, key: string) {
+    counts[key] = (counts[key] || 0) + 1;
+}
+
+function processEventCounts(event: IPixelEvent, ipCounts: Record<string, number>) {
+    incrementCount(ipCounts, event.ip_hash);
+    return (ipCounts[event.ip_hash] ?? 0) > 1;
+}
+
+function aggregateDistributions(
+    event: IPixelEvent,
+    countryCounts: Record<string, number>,
+    regionCounts: Record<string, number>,
+    deviceTypeCounts: Record<string, number>,
+    osCounts: Record<string, number>,
+    browserCounts: Record<string, number>
+) {
+    if (event.country) incrementCount(countryCounts, event.country);
+    if (event.region) incrementCount(regionCounts, event.region);
+    if (event.device_type) incrementCount(deviceTypeCounts, event.device_type);
+    if (event.os) incrementCount(osCounts, event.os);
+    if (event.browser) incrementCount(browserCounts, event.browser);
+}
+
+function aggregateParams(params: Record<string, any>, paramCounts: Record<string, Record<string, number>>) {
+    if (!params || Object.keys(params).length === 0) return;
+
+    for (const key of Object.keys(params)) {
+        paramCounts[key] = paramCounts[key] || {};
+        const value = String(params[key]);
+        incrementCount(paramCounts[key], value);
+    }
+}
+
+function buildPublicEvent(event: IPixelEvent, isReturning: boolean) {
+    const params = event.params && typeof event.params === 'object' ? event.params : {};
+
+    return {
+        timestamp: event.timestamp,
+        isReturning,
+        country: event.country,
+        region: event.region,
+        browser: event.browser,
+        os: event.os,
+        deviceType: event.device_type,
+        params: params,
+        notes: event.notes ?? null
+    };
+}
+
+function calculateUserStats(ipCounts: Record<string, number>, totalEvents: number) {
+    const uniqueUsers = Object.keys(ipCounts).length;
+    const returningUsers = Object.values(ipCounts).filter(c => c > 1).length;
+    const newUsers = uniqueUsers - returningUsers;
+    const eventsPerUser = uniqueUsers > 0 ? parseFloat((totalEvents / uniqueUsers).toFixed(1)) : 0;
+
+    return { uniqueUsers, returningUsers, newUsers, eventsPerUser };
+}
+
+function buildParameterRows(paramCounts: Record<string, Record<string, number>>) {
+    const parameterRows: Array<{ parameter: string; value: string; count: number }> = [];
+
+    for (const [param, valueCounts] of Object.entries(paramCounts)) {
+        for (const [value, count] of Object.entries(valueCounts)) {
+            parameterRows.push({
+                parameter: param,
+                value: value,
+                count: count as number
+            });
+        }
+    }
+
+    parameterRows.sort((a, b) => {
+        if (a.parameter !== b.parameter) {
+            return a.parameter.localeCompare(b.parameter);
+        }
+        return b.count - a.count;
+    });
+
+    return parameterRows;
 }
 
 function getPixelStats(pixelId: string) {
@@ -71,58 +171,18 @@ function getPixelStats(pixelId: string) {
     const publicEvents: any[] = [];
 
     for (const event of events) {
-        ipCounts[event.ip_hash] = (ipCounts[event.ip_hash] || 0) + 1;
-        const isReturning = (ipCounts[event.ip_hash] ?? 0) > 1;
+        const isReturning = processEventCounts(event, ipCounts);
 
-        if (event.country) countryCounts[event.country] = (countryCounts[event.country] || 0) + 1;
-        if (event.region) regionCounts[event.region] = (regionCounts[event.region] || 0) + 1;
-        if (event.device_type) deviceTypeCounts[event.device_type] = (deviceTypeCounts[event.device_type] || 0) + 1;
-        if (event.os) osCounts[event.os] = (osCounts[event.os] || 0) + 1;
-        if (event.browser) browserCounts[event.browser] = (browserCounts[event.browser] || 0) + 1;
+        aggregateDistributions(event, countryCounts, regionCounts, deviceTypeCounts, osCounts, browserCounts);
 
         const params = event.params && typeof event.params === 'object' ? event.params : {};
-        if (params && Object.keys(params).length > 0) {
-            for (const key of Object.keys(params)) {
-                paramCounts[key] = paramCounts[key] || {};
-                const value = String(params[key]);
-                paramCounts[key][value] = (paramCounts[key][value] || 0) + 1;
-            }
-        }
+        aggregateParams(params, paramCounts);
 
-        publicEvents.push({
-            timestamp: event.timestamp,
-            isReturning,
-            country: event.country,
-            region: event.region,
-            browser: event.browser,
-            os: event.os,
-            deviceType: event.device_type,
-            params: params,
-            notes: event.notes ?? null
-        });
+        publicEvents.push(buildPublicEvent(event, isReturning));
     }
 
-    const uniqueUsers = Object.keys(ipCounts).length;
-    const returningUsers = Object.values(ipCounts).filter(c => c > 1).length;
-    const newUsers = uniqueUsers - returningUsers;
-    const eventsPerUser = uniqueUsers > 0 ? parseFloat((events.length / uniqueUsers).toFixed(1)) : 0;
-
-    const parameterRows: Array<{ parameter: string; value: string; count: number }> = [];
-    for (const [param, valueCounts] of Object.entries(paramCounts)) {
-        for (const [value, count] of Object.entries(valueCounts)) {
-            parameterRows.push({
-                parameter: param,
-                value: value,
-                count: count as number
-            });
-        }
-    }
-    parameterRows.sort((a, b) => {
-        if (a.parameter !== b.parameter) {
-            return a.parameter.localeCompare(b.parameter);
-        }
-        return b.count - a.count;
-    });
+    const { uniqueUsers, returningUsers, newUsers, eventsPerUser } = calculateUserStats(ipCounts, events.length);
+    const parameterRows = buildParameterRows(paramCounts);
 
     return {
         pixel: {

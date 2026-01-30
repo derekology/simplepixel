@@ -1,8 +1,15 @@
 const repository = require("../repos/sqlite3");
 
+const MINUTES_TO_MS = 60 * 1000;
+
+function logCleanupResult(deletedCount: number) {
+    if (deletedCount > 0) {
+        console.log(`Cleanup complete: ${deletedCount} expired pixel(s) deleted`);
+    }
+}
+
 function deleteExpiredPixels() {
     const now = Date.now();
-
     const pixels = repository.getAllPixels();
 
     let deletedCount = 0;
@@ -15,9 +22,7 @@ function deleteExpiredPixels() {
         }
     }
 
-    if (deletedCount > 0) {
-        console.log(`Cleanup complete: ${deletedCount} expired pixel(s) deleted`);
-    }
+    logCleanupResult(deletedCount);
 
     return deletedCount;
 }
@@ -30,7 +35,7 @@ function startCleanupService(intervalMinutes: number = 60) {
     setInterval(() => {
         console.log('Running scheduled pixel cleanup...');
         deleteExpiredPixels();
-    }, intervalMinutes * 60 * 1000);
+    }, intervalMinutes * MINUTES_TO_MS);
 }
 
 module.exports = {

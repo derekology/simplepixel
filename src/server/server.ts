@@ -16,6 +16,16 @@ app.set('view engine', 'html');
 
 app.use("/frontend", express.static(path.join(__dirname, "../frontend/dist")));
 
+function sendPixelResponse(res: Response) {
+    res.setHeader("Content-Type", "image/gif");
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.send(PIXEL_BUFFER);
+}
+
+function handleNotFound(res: Response, message: string = "Pixel not found") {
+    res.status(404).json({ error: message });
+}
+
 app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
     const pixelId = req.params.pixelId;
     if (!pixelId || Array.isArray(pixelId)) {
@@ -25,9 +35,7 @@ app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
 
     recordPixelEvent(pixelId, req.ip, req.get("User-Agent") || "", req.query as any);
 
-    res.setHeader("Content-Type", "image/gif");
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.send(PIXEL_BUFFER);
+    sendPixelResponse(res);
 });
 
 app.get("/create-pixel", (req: Request, res: Response) => {
@@ -37,13 +45,13 @@ app.get("/create-pixel", (req: Request, res: Response) => {
 
 app.get("/stats/:pixelId", (req: Request, res: Response) => {
     const stats = getPixelStats(req.params.pixelId);
-    if (!stats) return res.status(404).json({ error: "Pixel not found" });
+    if (!stats) return handleNotFound(res);
     res.json(stats);
 });
 
 app.post("/delete/:pixelId", (req: Request, res: Response) => {
     const deleted = deletePixel(req.params.pixelId);
-    if (!deleted) return res.status(404).json({ error: "Pixel not found" });
+    if (!deleted) return handleNotFound(res);
     res.json({ success: true });
 });
 
