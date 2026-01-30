@@ -82,19 +82,7 @@ function copyToClipboard(text: string) {
             <h2>How to Use Your Pixel</h2>
 
             <div class="step">
-                <h3>Step 1: Embed Your Pixel</h3>
-                <p>Copy the code below and paste it into your HTML, email template, or anywhere you want to track
-                    visitors:</p>
-                <div class="code-box">
-                    <code>{{ embedCode }}</code>
-                    <button class="copy-btn" @click="copyToClipboard(embedCode)">Copy</button>
-                </div>
-                <p class="note">The pixel is a transparent 1x1 image that loads invisibly when someone views your page
-                    or opens your email.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 2: Add Custom Parameters (Optional)</h3>
+                <h3>Step 1: Add Custom Parameters (Optional)</h3>
                 <p>Track additional information by adding parameters to your pixel URL. You can add up to {{ maxParams
                 }} parameters:</p>
 
@@ -131,6 +119,18 @@ function copyToClipboard(text: string) {
                         <li><strong>User Segments:</strong> <code>plan=premium&cohort=2024-q1</code></li>
                     </ul>
                 </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 2: Embed Your Pixel</h3>
+                <p>Copy the code below and paste it into your HTML, email template, or anywhere you want to track
+                    visitors:</p>
+                <div class="code-box">
+                    <code>{{ embedCode }}</code>
+                    <button class="copy-btn" @click="copyToClipboard(embedCode)">Copy</button>
+                </div>
+                <p class="note">The pixel is a transparent 1x1 image that loads invisibly when someone views your page
+                    or opens your email.</p>
             </div>
 
             <div class="step">
@@ -192,7 +192,27 @@ function copyToClipboard(text: string) {
             </div>
         </section>
 
-        <section class="help-section">
+        <section class="help-section disclaimer-section">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                Simple Pixel is provided "as-is" without any warranties or guarantees of any kind, express or implied.
+                The developers and maintainers are not responsible for any data loss, service interruptions, tracking
+                inaccuracies, or any other issues that may arise from using this tool. Use at your own risk.
+            </p>
+            <p class="disclaimer-text">
+                While we strive to protect user privacy through IP hashing and minimal data collection, you are
+                responsible for ensuring your use of this tracking tool complies with all applicable privacy laws and
+                regulations in your jurisdiction (including GDPR, CCPA, etc.). Always inform your users about tracking
+                and obtain necessary consent where required.
+            </p>
+            <p class="disclaimer-text">
+                This tool is intended for legitimate tracking purposes such as analytics and campaign monitoring. Any
+                misuse, including but not limited to surveillance, harassment, or other malicious activities, is
+                strictly prohibited and is solely the responsibility of the user.
+            </p>
+        </section>
+
+        <!-- <section class="help-section">
             <h2>Need Help?</h2>
             <p>Simple Pixel is designed to be straightforward, but if you run into issues:</p>
             <ul>
@@ -201,7 +221,7 @@ function copyToClipboard(text: string) {
                 <li>Verify the pixel ID in your URL matches your dashboard</li>
                 <li>Remember that pixels expire after 7 days</li>
             </ul>
-        </section>
+        </section> -->
     </div>
 </template>
 
@@ -467,6 +487,21 @@ function copyToClipboard(text: string) {
     line-height: 1.7;
     color: #555;
     margin: 0;
+}
+
+.disclaimer-section {
+    border-left: 5px solid #666;
+}
+
+.disclaimer-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #555;
+    margin: 0 0 1rem 0;
+}
+
+.disclaimer-text:last-child {
+    margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
