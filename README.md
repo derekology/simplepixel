@@ -47,7 +47,7 @@ cp .env.example .env
 
 3. Start the application:
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 4. Access the application at `http://localhost:3000`
@@ -60,7 +60,7 @@ docker build -t simple-pixel .
 docker run -d \
   -p 3000:3000 \
   -v simple-pixel-data:/app/data \
-  -e HOST_NAME=localhost:3000 \
+  -e HOST_NAME=localhost \
   --name simple-pixel \
   simple-pixel
 ```

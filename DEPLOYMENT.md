@@ -16,18 +16,11 @@ This guide covers deploying Simple Pixel to a production environment using Docke
 ### 1. Server Preparation
 
 ```bash
-# Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Add user to docker group
 sudo usermod -aG docker $USER
 ```
 
@@ -66,7 +59,7 @@ PIXEL_EXPIRY_DAYS=7
 ### 4. Start Application
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Reverse Proxy Setup
@@ -163,13 +156,10 @@ crontab -e
 ### Basic Health Check
 
 ```bash
-# Check container status
-docker-compose ps
+docker compose ps
 
-# View logs
-docker-compose logs -f
+docker compose logs -f
 
-# Check resource usage
 docker stats simple-pixel
 ```
 
@@ -219,8 +209,6 @@ location /p/ {
 ### Vertical Scaling
 
 Adjust resources in `docker-compose.yml`:
-
-```yaml
 services:
   simple-pixel:
     deploy:
@@ -245,33 +233,27 @@ For high traffic, consider:
 ### Update Application
 
 ```bash
-# Pull latest changes
 git pull
 
-# Rebuild
-docker-compose build --no-cache
+docker compose build --no-cache
 
-# Restart
-docker-compose up -d
+docker compose up -d
 ```
 
 ### View Logs
 
 ```bash
-# All logs
-docker-compose logs
+docker compose logs
 
-# Follow logs
-docker-compose logs -f
+docker compose logs -f
 
-# Last 100 lines
-docker-compose logs --tail=100
+docker compose logs --tail=100
 ```
 
 ### Restart Service
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Clean Up
@@ -353,6 +335,6 @@ Requirements:
 ## Support
 
 For issues or questions:
-- Check logs: `docker-compose logs`
+- Check logs: `docker compose logs`
 - Review documentation: `README.md`, `DOCKER_SETUP.md`
 - Check GitHub issues

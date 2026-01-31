@@ -114,7 +114,7 @@ All configurable via environment variables:
 
 ### Quick Start
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Build from scratch
