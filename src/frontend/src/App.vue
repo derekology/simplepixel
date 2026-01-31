@@ -274,6 +274,11 @@ onUnmounted(() => {
   cursor: pointer;
   pointer-events: auto;
   font-style: italic;
+  transition: all 0.2s;
+}
+
+.byline:hover {
+  color: #FFFFFF;
 }
 
 .nav {
