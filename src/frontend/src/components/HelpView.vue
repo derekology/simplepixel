@@ -227,60 +227,60 @@ function copyToClipboard(text: string) {
 
 <style scoped>
 .help-container {
-    padding: 2rem;
+    padding: var(--spacing-xl);
     max-width: 1000px;
     margin: 0 auto;
 }
 
 .help-container h1 {
     font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
     text-align: center;
 }
 
 .subtitle {
     text-align: center;
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 2rem;
+    font-size: 1.var(--spacing-xl);
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-xl);
 }
 
 .help-section {
     background: white;
     border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .help-section h2 {
     font-size: 1.8rem;
-    margin: 0 0 1.5rem 0;
-    padding-bottom: 0.5rem;
+    margin: 0 0 var(--spacing-lg) 0;
+    padding-bottom: var(--spacing-sm);
 }
 
 .value-props {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    /* margin-top: 1.5rem; */
+    gap: var(--spacing-lg);
+    /* margin-top: var(--spacing-lg); */
 }
 
 .value-prop {
     text-align: center;
-    padding: 1rem;
+    padding: var(--spacing-md);
 }
 
 .value-prop .icon {
     font-size: 3rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .value-prop h3 {
-    font-size: 1.2rem;
-    color: #333;
-    margin: 0.5rem 0;
+    font-size: 1.var(--spacing-xl);
+    color: var(--color-text-primary);
+    margin: var(--spacing-sm) 0;
 }
 
 .value-prop p {
@@ -291,7 +291,7 @@ function copyToClipboard(text: string) {
 }
 
 .step {
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
 }
 
 .step:last-child {
@@ -300,74 +300,74 @@ function copyToClipboard(text: string) {
 
 .step h3 {
     font-size: 1.3rem;
-    color: #333;
+    color: var(--color-text-primary);
     margin: 0 0 0.75rem 0;
 }
 
 .step p {
-    font-size: 1rem;
+    font-size: var(--spacing-md);
     line-height: 1.6;
     color: #555;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .step ul {
-    margin: 0.5rem 0 0 1.5rem;
+    margin: var(--spacing-sm) 0 0 var(--spacing-lg);
     color: #555;
     line-height: 1.8;
 }
 
 .note {
     font-size: 0.9rem;
-    color: #666;
+    color: var(--color-text-light);
     font-style: italic;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-sm);
 }
 
 .code-box {
     background: #f5f5f5;
     border: 1px solid #ddd;
     border-radius: 6px;
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
     position: relative;
     font-family: 'Courier New', monospace;
     word-break: break-all;
 }
 
 .code-box code {
-    color: #333;
+    color: var(--color-text-primary);
     font-size: 0.9rem;
 }
 
 .copy-btn {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
     padding: 0.4rem 0.8rem;
-    background: #dd3333;
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-text-white);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.85rem;
-    transition: background 0.2s;
+    transition: var(--transition-normal);
 }
 
 .copy-btn:hover {
-    background: #bb2a2a;
+    background: var(--color-primary-dark);
 }
 
 .params-builder {
     background: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin: 1rem 0;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-md) 0;
 }
 
 .param-row {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
     margin-bottom: 0.75rem;
     align-items: center;
 }
@@ -375,81 +375,85 @@ function copyToClipboard(text: string) {
 .param-input {
     flex: 1;
     padding: 0.6rem;
-    border: 2px solid #ddd;
-    border-radius: 4px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
     font-size: 0.95rem;
 }
 
 .param-input:focus {
-    outline: none;
-    border-color: #dd3333;
+    border-color: var(--color-primary);
 }
 
 .equals {
-    color: #999;
+    color: var(--color-text-lighter);
     font-weight: bold;
+}
+
+.remove-btn,
+.add-btn {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-normal);
 }
 
 .remove-btn {
     padding: 0.4rem 0.6rem;
-    background: #dd3333;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.2s;
+    font-size: var(--spacing-md);
 }
 
-.remove-btn:hover {
-    background: #bb2a2a;
+.remove-btn:hover,
+.add-btn:hover {
+    background: var(--color-primary-dark);
 }
 
 .add-btn {
-    padding: 0.6rem 1.2rem;
-    background: #dd3333;
+    padding: 0.6rem 1.var(--spacing-xl);
+    font-size: 0.95rem;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.95rem;
-    transition: background 0.2s;
+    transition: var(--transition-normal);
 }
 
 .add-btn:hover {
-    background: #bb2a2a;
+    background: var(--color-primary-dark);
 }
 
 .generated-url {
-    margin-top: 1.5rem;
+    margin-top: var(--spacing-lg);
 }
 
 .generated-url strong {
     display: block;
-    margin-bottom: 0.5rem;
-    color: #333;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
 }
 
 .examples {
-    margin-top: 1.5rem;
-    padding: 1rem;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
     background: #e8f4f8;
     border-radius: 6px;
 }
 
 .examples h4 {
     margin: 0 0 0.75rem 0;
-    color: #333;
+    color: var(--color-text-primary);
 }
 
 .examples ul {
-    margin: 0 0 0 1.5rem;
+    margin: 0 0 0 var(--spacing-lg);
     line-height: 2;
 }
 
 .examples code {
     background: white;
-    padding: 0.2rem 0.5rem;
+    padding: 0.var(--spacing-xl) var(--spacing-sm);
     border-radius: 3px;
     font-family: 'Courier New', monospace;
     font-size: 0.85rem;
@@ -464,12 +468,12 @@ function copyToClipboard(text: string) {
 .warning-text {
     font-size: 1.05rem;
     line-height: 1.8;
-    color: #333;
+    color: var(--color-text-primary);
     margin: 0;
 }
 
 .faq-item {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .faq-item:last-child {
@@ -477,9 +481,9 @@ function copyToClipboard(text: string) {
 }
 
 .faq-item h3 {
-    font-size: 1.1rem;
-    color: #333;
-    margin: 0 0 0.5rem 0;
+    font-size: 1.var(--spacing-md);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-sm) 0;
 }
 
 .faq-item p {
@@ -497,7 +501,7 @@ function copyToClipboard(text: string) {
     font-size: 0.9rem;
     line-height: 1.7;
     color: #555;
-    margin: 0 0 1rem 0;
+    margin: 0 0 var(--spacing-md) 0;
 }
 
 .disclaimer-text:last-child {
@@ -506,11 +510,11 @@ function copyToClipboard(text: string) {
 
 @media (max-width: 768px) {
     .help-container {
-        padding: 1rem;
+        padding: var(--spacing-md);
     }
 
     .help-container h1 {
-        font-size: 2rem;
+        font-size: var(--spacing-xl);
     }
 
     .value-props {

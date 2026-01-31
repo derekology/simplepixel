@@ -131,8 +131,8 @@ function formatNotes(notes: string | null) {
     max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    box-shadow: 0 var(--shadow-sm) 6px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-lg);
 }
 
 .modal-header {
@@ -144,16 +144,16 @@ function formatNotes(notes: string | null) {
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.5rem;
-    color: #333;
+    font-size: var(--spacing-lg);
+    color: var(--color-text-primary);
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: var(--spacing-xl);
     cursor: pointer;
-    color: #666;
+    color: var(--color-text-light);
     line-height: 1;
     padding: 0;
     width: 32px;
@@ -161,7 +161,7 @@ function formatNotes(notes: string | null) {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     transition: background-color 0.2s;
 }
 
@@ -170,7 +170,7 @@ function formatNotes(notes: string | null) {
 }
 
 .detail-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .detail-section:last-child {
@@ -178,40 +178,40 @@ function formatNotes(notes: string | null) {
 }
 
 .detail-section h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
-    color: #333;
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.var(--spacing-md);
+    color: var(--color-text-primary);
     border-bottom: 2px solid #e5e5e5;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 .detail-row {
     display: flex;
-    padding: 0.5rem 0;
+    padding: var(--spacing-sm) 0;
 }
 
 .label {
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-light);
     min-width: 150px;
 }
 
 .value {
-    color: #333;
+    color: var(--color-text-primary);
 }
 
 .notes-content {
-    padding: 1rem;
+    padding: var(--spacing-md);
     background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    border-radius: 4px;
-    color: #333;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
     white-space: pre-wrap;
 }
 
 .params-grid {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--spacing-xs);
 }
 
 .param-row {
@@ -227,7 +227,7 @@ function formatNotes(notes: string | null) {
 }
 
 .param-value {
-    color: #333;
+    color: var(--color-text-primary);
     word-break: break-word;
 }
 

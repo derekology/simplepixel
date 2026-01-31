@@ -37,7 +37,7 @@ onUnmounted(() => {
 
 <style scoped>
 .mobile-warning {
-    padding: 2rem;
+    padding: var(--spacing-xl);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -45,46 +45,46 @@ onUnmounted(() => {
 .mobile-content {
     background: white;
     border-radius: 12px;
-    padding: 2rem 1.5rem;
+    padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
 }
 
 .icon {
     font-size: 4rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 h1 {
     font-size: 1.75rem;
-    color: #333;
-    margin: 0 0 1rem 0;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-md) 0;
 }
 
 .message {
-    font-size: 1rem;
+    font-size: var(--spacing-md);
     color: #555;
-    margin: 0 0 1rem 0;
+    margin: 0 0 var(--spacing-md) 0;
     line-height: 1.6;
 }
 
 .suggestion {
     font-size: 0.95rem;
-    color: #666;
-    margin: 0 0 1.5rem 0;
+    color: var(--color-text-light);
+    margin: 0 0 var(--spacing-lg) 0;
     line-height: 1.6;
 }
 
 .info-box {
     background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
     border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
     border-left: 5px solid #ff9800;
 }
 
 .info-box p {
-    margin: 0.5rem 0;
+    margin: var(--spacing-sm) 0;
     font-size: 0.9rem;
     color: #555;
 }
@@ -95,8 +95,8 @@ h1 {
 }
 
 .create-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.75rem var(--spacing-lg);
+    font-size: var(--spacing-md);
     font-weight: 600;
     color: white;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -104,7 +104,7 @@ h1 {
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 var(--shadow-sm) 12px rgba(102, 126, 234, 0.4);
 }
 
 .create-btn:hover {

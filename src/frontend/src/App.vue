@@ -244,41 +244,42 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #222222;
-  color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-top: 5px solid #dd3333;
+  background: var(--color-bg-dark);
+  color: var(--color-text-white);
+  box-shadow: var(--shadow-md);
+  ;
+  border-top: 5px solid var(--color-primary);
   height: 50px;
 }
 
 .logo {
   pointer-events: none;
   user-select: none;
-  margin: 0.5rem 0.75rem;
+  margin: var(--spacing-sm) 0.75rem;
   font-size: 1.25rem;
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
 .logo-highlight {
-  color: #dd3333;
+  color: var(--color-primary);
   font-weight: 900;
-  margin-right: 4px;
+  margin-right: var(--radius-sm);
   font-size: 0.75rem;
 }
 
 .byline {
   font-size: 0.75rem;
-  color: #bbbbbb;
-  margin-left: 4px;
+  color: var(--color-text-muted);
+  margin-left: var(--radius-sm);
   cursor: pointer;
   pointer-events: auto;
   font-style: italic;
-  transition: all 0.2s;
+  transition: var(--transition-normal);
 }
 
 .byline:hover {
-  color: #FFFFFF;
+  color: var(--color-text-white);
 }
 
 .nav {
@@ -289,26 +290,25 @@ onUnmounted(() => {
 
 .nav-button {
   min-width: 100px;
-  padding: 0.5rem 0.75rem;
+  padding: var(--spacing-sm) 0.75rem;
   height: 100%;
   border: 0;
-  background: #222222;
-  color: white;
+  background: var(--color-bg-dark);
+  color: var(--color-text-white);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition-normal);
 }
 
 .nav-button:hover {
-  background: #444444;
+  background: var(--color-bg-hover);
 }
 
 .nav-button.delete-button {
-  background: rgba(211, 47, 47, 0.3);
-  border-color: rgba(255, 255, 255, 0.8);
+  background: var(--color-danger-light);
 }
 
 .nav-button.delete-button:hover {
-  background: rgba(211, 47, 47, 0.5);
+  background: var(--color-danger-hover);
 }
 
 .dashboard {

@@ -183,7 +183,7 @@ watch(() => props.countryCounts, () => {
 <style scoped>
 .map-container {
     width: 100%;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
     background-color: #aad3df;
 }
 

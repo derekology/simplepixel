@@ -406,23 +406,23 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .stats-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin: 0 1rem 2rem 1rem;
+    gap: var(--spacing-md);
+    margin: 0 var(--spacing-md) var(--spacing-xl) var(--spacing-md);
 }
 
 .stat-card {
     /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
     background: #ffffff;
     color: #000000;
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 var(--shadow-sm) 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    flex: 1 1 calc(33.333% - 1rem);
+    gap: var(--spacing-lg);
+    flex: 1 1 calc(33.333% - var(--spacing-md));
     min-width: 250px;
 }
 
@@ -461,39 +461,39 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .charts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    padding: 0 1rem 1rem 1rem;
+    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
 }
 
 .time-series-container {
     background: white;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 1rem 2rem 1rem;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    margin: 0 var(--spacing-md) var(--spacing-xl) var(--spacing-md);
 }
 
 .time-series-container h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.2rem;
-    color: #333;
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.var(--spacing-xl);
+    color: var(--color-text-primary);
     border-bottom: 2px solid #e5e5e5;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 .chart-container {
     background: white;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .chart-container h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.2rem;
-    color: #333;
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.var(--spacing-xl);
+    color: var(--color-text-primary);
     border-bottom: 2px solid #e5e5e5;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 .chart-wrapper {
@@ -504,17 +504,17 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .params-table-container {
     background: white;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 1rem 2rem 1rem;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    margin: 0 var(--spacing-md) var(--spacing-xl) var(--spacing-md);
 }
 
 .params-table-container h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.2rem;
-    color: #333;
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.var(--spacing-xl);
+    color: var(--color-text-primary);
     border-bottom: 2px solid #e5e5e5;
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 .table-wrapper {
@@ -532,14 +532,14 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
 .params-table th {
     text-align: left;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem var(--spacing-md);
     font-weight: 600;
     color: #555;
     border-bottom: 2px solid #e5e5e5;
 }
 
 .params-table td {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem var(--spacing-md);
     border-bottom: 1px solid #e5e5e5;
 }
 
@@ -553,14 +553,14 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 }
 
 .param-value {
-    color: #333;
+    color: var(--color-text-primary);
     font-family: monospace;
 }
 
 .param-count {
     text-align: right;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-light);
 }
 
 @media (max-width: 768px) {
@@ -573,12 +573,12 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
     }
 
     .stat-value {
-        font-size: 2rem;
+        font-size: var(--spacing-xl);
     }
 
     .params-table th,
     .params-table td {
-        padding: 0.5rem;
+        padding: var(--spacing-sm);
         font-size: 0.9rem;
     }
 }

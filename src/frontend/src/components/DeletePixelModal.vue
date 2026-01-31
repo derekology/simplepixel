@@ -105,8 +105,8 @@ async function handleDelete() {
     max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    box-shadow: 0 var(--shadow-sm) 6px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-lg);
 }
 
 .modal-header {
@@ -117,16 +117,16 @@ async function handleDelete() {
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: var(--spacing-lg);
     color: #d32f2f;
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: var(--spacing-xl);
     cursor: pointer;
-    color: #666;
+    color: var(--color-text-light);
     line-height: 1;
     padding: 0;
     width: 32px;
@@ -134,7 +134,7 @@ async function handleDelete() {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     transition: background-color 0.2s;
 }
 
@@ -148,37 +148,37 @@ async function handleDelete() {
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
 }
 
 .warning-section {
     display: flex;
-    gap: 1rem;
-    padding: 1rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
     background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
     border-left: 5px solid #ff9800;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-lg);
 }
 
 .warning-icon {
-    font-size: 2rem;
+    font-size: var(--spacing-xl);
     flex-shrink: 0;
 }
 
 .warning-text {
     margin: 0;
-    color: #333;
+    color: var(--color-text-primary);
     line-height: 1.6;
 }
 
 .confirm-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .confirm-section label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
     color: #555;
     font-size: 0.95rem;
 }
@@ -188,7 +188,7 @@ async function handleDelete() {
     padding: 0.75rem;
     border: 2px solid #ddd;
     border-radius: 6px;
-    font-size: 1rem;
+    font-size: var(--spacing-md);
     transition: border-color 0.2s;
 }
 
@@ -206,23 +206,23 @@ async function handleDelete() {
     color: #d32f2f;
     background-color: #ffebee;
     padding: 0.75rem;
-    border-radius: 4px;
-    margin-bottom: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
     font-size: 0.9rem;
 }
 
 .button-group {
     display: flex;
-    gap: 1rem;
+    gap: var(--spacing-md);
     justify-content: flex-end;
 }
 
 .btn-cancel,
 .btn-delete {
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem var(--spacing-lg);
     border: none;
     border-radius: 6px;
-    font-size: 1rem;
+    font-size: var(--spacing-md);
     cursor: pointer;
     transition: all 0.2s;
     font-weight: 500;
@@ -230,7 +230,7 @@ async function handleDelete() {
 
 .btn-cancel {
     background-color: #f5f5f5;
-    color: #333;
+    color: var(--color-text-primary);
 }
 
 .btn-cancel:hover:not(:disabled) {
@@ -248,7 +248,7 @@ async function handleDelete() {
 
 .btn-delete:disabled {
     background-color: #e0e0e0;
-    color: #999;
+    color: var(--color-text-lighter);
     cursor: not-allowed;
 }
 

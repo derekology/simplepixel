@@ -25,7 +25,7 @@ function createNewPixel() {
 
 <style scoped>
 .not-found-container {
-    padding: 2rem;
+    padding: var(--spacing-xl);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -33,43 +33,43 @@ function createNewPixel() {
 .not-found-content {
     background: white;
     border-radius: 12px;
-    padding: 3rem 2rem;
+    padding: 3rem var(--spacing-xl);
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
 }
 
 .icon {
     font-size: 5rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 h1 {
-    font-size: 2rem;
-    color: #333;
-    margin: 0 0 1rem 0;
+    font-size: var(--spacing-xl);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-md) 0;
 }
 
 .message {
-    font-size: 1.1rem;
+    font-size: 1.var(--spacing-md);
     color: #555;
-    margin: 0 0 1rem 0;
+    margin: 0 0 var(--spacing-md) 0;
     line-height: 1.6;
 }
 
 .info {
     font-size: 0.95rem;
-    color: #666;
-    margin: 0 0 2rem 0;
+    color: var(--color-text-light);
+    margin: 0 0 var(--spacing-xl) 0;
     line-height: 1.6;
-    padding: 1rem;
+    padding: var(--spacing-md);
     background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
     border-left: 5px solid #ff9800;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
 .create-btn {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1.var(--spacing-md);
     font-weight: 600;
     color: white;
     background: #dd3333;
@@ -89,15 +89,15 @@ h1 {
 
 @media (max-width: 768px) {
     .not-found-container {
-        padding: 1rem;
+        padding: var(--spacing-md);
     }
 
     .not-found-content {
-        padding: 2rem 1.5rem;
+        padding: var(--spacing-xl) var(--spacing-lg);
     }
 
     h1 {
-        font-size: 1.5rem;
+        font-size: var(--spacing-lg);
     }
 
     .icon {

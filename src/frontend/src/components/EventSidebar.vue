@@ -79,14 +79,23 @@ function closeModal() {
 
 <style scoped>
 .sidebar-container {
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
     height: 100%;
 }
 
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: var(--spacing-sm) var(--spacing-sm) var(--spacing-md) var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--color-primary);
+}
+
 .no-events {
-    padding: 2rem 1rem;
+    padding: var(--spacing-xl) var(--spacing-md);
     text-align: center;
-    color: #999;
+    color: var(--color-text-lighter);
     font-style: italic;
 }
 
@@ -97,48 +106,48 @@ function closeModal() {
 }
 
 .event-card {
-    background: #FFFFFF;
+    background: var(--color-bg-white);
     padding: 0.75rem;
-    border-radius: 8px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
 }
 
 .event-card:hover {
-    background-color: #EEEEEE;
+    background-color: var(--color-bg-light);
 }
 
 .event-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-sm);
     align-items: center;
 }
 
 .time {
     font-weight: bold;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--color-text);
 }
 
 .date {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--color-text-light);
     font-style: italic;
 }
 
 .indicators {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
 }
 
 .note-indicator {
-    background: linear-gradient(135deg, #ffd54f 0%, #ffca28 100%);
-    color: #333;
+    background: linear-gradient(135deg, var(--color-note) 0%, var(--color-note-alt) 100%);
+    color: var(--color-text);
     font-weight: bold;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     width: 18px;
     height: 18px;
     display: flex;
@@ -150,10 +159,10 @@ function closeModal() {
 }
 
 .new-user {
-    background: #dd3333;
-    border-radius: 4px;
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
     padding: 3px 8px;
-    color: white;
+    color: var(--color-text-white);
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
