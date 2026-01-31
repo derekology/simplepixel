@@ -85,7 +85,7 @@ function navigateToNewPixel() {
 }
 
 function goToWebsite() {
-  window.open('https://derekw.co/', '_blank');
+  window.open('https://derekw.co/?utm_medium=referral&utm_source=simple-pixel', '_blank');
 }
 
 function escapeCSVValue(value: string): string {
