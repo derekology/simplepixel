@@ -43,15 +43,11 @@ nano .env
 Edit `.env` for production:
 
 ```bash
-# Production settings
 NODE_ENV=production
 PORT=3000
-HOST_NAME=yourdomain.com
 
-# Database (use absolute path or Docker volume)
 DB_PATH=/app/data/simple-pixel.db
 
-# Adjust these based on your needs
 CLEANUP_INTERVAL_MINUTES=60
 PIXEL_EXPIRY_DAYS=7
 ```

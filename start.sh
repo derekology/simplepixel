@@ -45,7 +45,6 @@ echo "Waiting for application to be ready..."
 sleep 5
 
 PORT=${PORT:-3000}
-HOST_NAME=${HOST_NAME:-localhost}
 
 if docker compose ps | grep -q "Up"; then
     echo "✓ Container is running"
@@ -55,7 +54,7 @@ if docker compose ps | grep -q "Up"; then
     echo "========================================="
     echo ""
     echo "Access the application at:"
-    echo "  http://${HOST_NAME}:${PORT}"
+    echo "  http://localhost:${PORT}"
     echo ""
     echo "Useful commands:"
     echo "  docker compose logs -f    # View logs"

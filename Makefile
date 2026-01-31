@@ -13,7 +13,7 @@ build:
 
 up:
 	docker compose up -d
-	@echo "Simple Pixel is running (check .env for HOST_NAME and PORT)"
+	@echo "Simple Pixel is running (check .env for PORT)"
 
 down:
 	docker compose down

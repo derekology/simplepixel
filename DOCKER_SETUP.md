@@ -54,8 +54,7 @@
 
 2. **src/server/server.ts**
    - Environment variable support for PORT
-   - Environment variable support for HOST_NAME
-   - Improved logging with environment info
+   - Uses request host header for redirects
 
 3. **src/services/pixelService.ts**
    - Environment variable support for PIXEL_EXPIRY_DAYS
@@ -73,7 +72,6 @@
 All configurable via environment variables:
 
 - `PORT` (default: 3000) - Server port
-- `HOST_NAME` (default: localhost:3000) - Hostname for redirects
 - `DB_PATH` (default: /app/data/simple-pixel.db) - Database location
 - `CLEANUP_INTERVAL_MINUTES` (default: 60) - Cleanup frequency
 - `PIXEL_EXPIRY_DAYS` (default: 7) - Pixel lifetime
@@ -135,7 +133,6 @@ make backup-db
 
 ## Production Deployment Checklist
 
-- [ ] Set appropriate HOST_NAME environment variable
 - [ ] Configure reverse proxy (nginx/traefik)
 - [ ] Set up SSL/TLS certificates
 - [ ] Configure volume backups

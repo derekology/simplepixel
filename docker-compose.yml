@@ -10,7 +10,6 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=${PORT:-3000}
-      - HOST_NAME=${HOST_NAME:-localhost}
       - DB_PATH=/app/data/simple-pixel.db
       - CLEANUP_INTERVAL_MINUTES=${CLEANUP_INTERVAL_MINUTES:-60}
       - PIXEL_EXPIRY_DAYS=${PIXEL_EXPIRY_DAYS:-7}

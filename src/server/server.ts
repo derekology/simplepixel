@@ -8,7 +8,6 @@ import type { Request, Response } from "express";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3000", 10);
-const HOST_NAME = process.env.HOST_NAME || "localhost";
 const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=", "base64");
 
 const FRONTEND_DIST = path.join(__dirname, "../frontend/dist");
@@ -47,10 +46,9 @@ app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
 
 app.get("/", (req: Request, res: Response) => {
     const pixelId = createPixel();
-    const redirectUrl = PORT === 80 || PORT === 443
-        ? `${req.protocol}://${HOST_NAME}/${pixelId}`
-        : `${req.protocol}://${HOST_NAME}:${PORT}/${pixelId}`;
-    res.redirect(redirectUrl);
+    const protocol = req.protocol;
+    const host = req.get('host');
+    res.redirect(`${protocol}://${host}/${pixelId}`);
 });
 
 app.get("/stats/:pixelId", (req: Request, res: Response) => {
@@ -78,7 +76,7 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
 startCleanupService();
 
 app.listen(PORT, () => {
-    console.log(`Simple Pixel server running on http://${HOST_NAME}:${PORT}`);
+    console.log(`Simple Pixel server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`Database: ${process.env.DB_PATH || 'default location'}`);
 });

@@ -63,7 +63,6 @@ echo Waiting for application to be ready...
 timeout /t 5 /nobreak >nul
 
 if not defined PORT set PORT=3000
-if not defined HOST_NAME set HOST_NAME=localhost
 
 docker compose ps | findstr "Up" >nul
 if errorlevel 1 (
@@ -79,7 +78,7 @@ echo    Simple Pixel is ready!
 echo =========================================
 echo.
 echo Access the application at:
-echo   http://%HOST_NAME%:%PORT%
+echo   http://localhost:%PORT%
 echo.
 echo Useful commands:
 echo   docker compose logs -f    # View logs

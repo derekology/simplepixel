@@ -56,7 +56,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-4. Access the application (defaults to `http://localhost:3000`, but will use your configured HOST_NAME and PORT from `.env`)
+4. Access the application at `http://localhost:3000` (or your configured PORT from `.env`)
 
 ### Using Docker
 
@@ -67,22 +67,18 @@ docker build -t simple-pixel .
 docker run -d \
   -p 3000:3000 \
   -v simple-pixel-data:/app/data \
-  -e HOST_NAME=localhost \
   -e PORT=3000 \
   --name simple-pixel \
   simple-pixel
 ```
 
-**Note:** Adjust both the port mapping and environment variables as needed (e.g., `-p 8080:8080 -e HOST_NAME=example.com -e PORT=8080`).
-
-## Environment Variables
+**Note:** Adjust the port mapping as needed (e.g., `-p 8080:8080 -e PORT=8080`).
 
 ## Environment Variables
 
 | Variable                   | Default                     | Description                           |
 | -------------------------- | --------------------------- | ------------------------------------- |
 | `PORT`                     | `3000`                      | Server port                           |
-| `HOST_NAME`                | `localhost:3000`            | Hostname for redirects                |
 | `DB_PATH`                  | `/app/data/simple-pixel.db` | Database file path                    |
 | `CLEANUP_INTERVAL_MINUTES` | `60`                        | How often to check for expired pixels |
 | `PIXEL_EXPIRY_DAYS`        | `7`                         | Days until pixel expires              |
