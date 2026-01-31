@@ -8,7 +8,7 @@ import type { Request, Response } from "express";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3000", 10);
-const HOST_NAME = process.env.HOST_NAME || `localhost:${PORT}`;
+const HOST_NAME = process.env.HOST_NAME || "localhost";
 const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=", "base64");
 
 app.engine('html', require('ejs').renderFile);
@@ -26,6 +26,10 @@ function handleNotFound(res: Response, message: string = "Pixel not found") {
     res.status(404).json({ error: message });
 }
 
+app.get("/health", (req: Request, res: Response) => {
+    res.status(200).json({ status: "ok", timestamp: Date.now() });
+});
+
 app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
     const pixelId = req.params.pixelId;
     if (!pixelId || Array.isArray(pixelId)) {
@@ -40,7 +44,10 @@ app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
 
 app.get("/create-pixel", (req: Request, res: Response) => {
     const pixelId = createPixel();
-    res.redirect(`https://${HOST_NAME}/${pixelId}`);
+    const redirectUrl = PORT === 80 || PORT === 443 
+        ? `${req.protocol}://${HOST_NAME}/${pixelId}`
+        : `${req.protocol}://${HOST_NAME}:${PORT}/${pixelId}`;
+    res.redirect(redirectUrl);
 });
 
 app.get("/stats/:pixelId", (req: Request, res: Response) => {
@@ -69,7 +76,7 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
 startCleanupService();
 
 app.listen(PORT, () => {
-    console.log(`Simple Pixel server running on http://${HOST_NAME}`);
+    console.log(`Simple Pixel server running on http://${HOST_NAME}:${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`Database: ${process.env.DB_PATH || 'default location'}`);
 });
