@@ -11,10 +11,13 @@ const PORT = parseInt(process.env.PORT || "3000", 10);
 const HOST_NAME = process.env.HOST_NAME || "localhost";
 const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=", "base64");
 
+const FRONTEND_DIST = path.join(__dirname, "../frontend/dist");
+const INDEX_HTML = path.join(FRONTEND_DIST, "index.html");
+
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.use("/frontend", express.static(path.join(__dirname, "../frontend/dist")));
+app.use("/frontend", express.static(FRONTEND_DIST));
 
 function sendPixelResponse(res: Response) {
     res.setHeader("Content-Type", "image/gif");
@@ -66,8 +69,7 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
     const { pixelId } = req.params;
     const stats = await getPixelStats(pixelId);
 
-    const indexPath = path.join(__dirname, "../frontend/dist/index.html");
-    res.render(indexPath, {
+    res.render(INDEX_HTML, {
         pixelId,
         stats: stats || null
     });
