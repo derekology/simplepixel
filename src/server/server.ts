@@ -34,6 +34,17 @@ app.get("/health", (req: Request, res: Response) => {
     res.status(200).json({ status: "ok", timestamp: Date.now() });
 });
 
+app.get("/favicon.ico", (req: Request, res: Response) => {
+    const faviconPath = path.join(FRONTEND_DIST, "favicon.ico");
+    console.log(`Favicon requested. Path: ${faviconPath}`);
+    res.sendFile(faviconPath, (err) => {
+        if (err) {
+            console.error('Favicon error:', err);
+            res.status(404).send('Favicon not found');
+        }
+    });
+});
+
 app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
     const pixelId = req.params.pixelId;
     if (!pixelId || Array.isArray(pixelId)) {
