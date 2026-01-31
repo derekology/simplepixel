@@ -1,10 +1,12 @@
 @echo off
+REM Simple Pixel Quick Start Script for Windows
 
 echo =========================================
 echo    Simple Pixel - Quick Start
 echo =========================================
 echo.
 
+REM Check if Docker is installed
 docker --version >nul 2>&1
 if errorlevel 1 (
     echo Error: Docker is not installed or not in PATH
@@ -13,6 +15,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM Check if Docker is running
 docker info >nul 2>&1
 if errorlevel 1 (
     echo Error: Docker is not running
@@ -24,6 +27,7 @@ if errorlevel 1 (
 echo [OK] Docker is installed and running
 echo.
 
+REM Create .env file if it doesn't exist
 if not exist .env (
     echo Creating .env file from template...
     copy .env.example .env >nul
@@ -33,8 +37,9 @@ if not exist .env (
 )
 echo.
 
+REM Build the image
 echo Building Docker image...
-docker compose build
+docker-compose build
 if errorlevel 1 (
     echo Error: Build failed
     pause
@@ -43,6 +48,7 @@ if errorlevel 1 (
 echo [OK] Build complete
 echo.
 
+REM Start the application
 echo Starting Simple Pixel...
 docker compose up -d
 if errorlevel 1 (
@@ -55,6 +61,9 @@ echo.
 
 echo Waiting for application to be ready...
 timeout /t 5 /nobreak >nul
+
+if not defined PORT set PORT=3000
+if not defined HOST_NAME set HOST_NAME=localhost
 
 docker compose ps | findstr "Up" >nul
 if errorlevel 1 (
@@ -70,10 +79,7 @@ echo    Simple Pixel is ready!
 echo =========================================
 echo.
 echo Access the application at:
-echo   http://localhost:3000
-echo.
-echo To create your first pixel, visit:
-echo   http://localhost:3000/create-pixel
+echo   http://%HOST_NAME%:%PORT%
 echo.
 echo Useful commands:
 echo   docker compose logs -f    # View logs

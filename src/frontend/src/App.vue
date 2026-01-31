@@ -81,7 +81,7 @@ function updateScreenWidth() {
 }
 
 function navigateToNewPixel() {
-  window.location.href = '/create-pixel';
+  window.location.href = '/';
 }
 
 function goToWebsite() {
@@ -94,7 +94,7 @@ function escapeCSVValue(value: string): string {
 
 function addCSVSection(lines: string[], title: string, header: string, data: Record<string, any>) {
   if (Object.keys(data).length === 0) return;
-  
+
   lines.push(title);
   lines.push(header);
   Object.entries(data).forEach(([key, value]) => {

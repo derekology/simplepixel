@@ -13,7 +13,7 @@ build:
 
 up:
 	docker compose up -d
-	@echo "Simple Pixel is running at http://localhost:3000"
+	@echo "Simple Pixel is running (check .env for HOST_NAME and PORT)"
 
 down:
 	docker compose down

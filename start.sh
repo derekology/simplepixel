@@ -44,6 +44,9 @@ echo ""
 echo "Waiting for application to be ready..."
 sleep 5
 
+PORT=${PORT:-3000}
+HOST_NAME=${HOST_NAME:-localhost}
+
 if docker compose ps | grep -q "Up"; then
     echo "✓ Container is running"
     echo ""
@@ -52,10 +55,7 @@ if docker compose ps | grep -q "Up"; then
     echo "========================================="
     echo ""
     echo "Access the application at:"
-    echo "  http://localhost:3000"
-    echo ""
-    echo "To create your first pixel, visit:"
-    echo "  http://localhost:3000/create-pixel"
+    echo "  http://${HOST_NAME}:${PORT}"
     echo ""
     echo "Useful commands:"
     echo "  docker compose logs -f    # View logs"

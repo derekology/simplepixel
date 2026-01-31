@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 function createNewPixel() {
-    window.location.href = '/create-pixel';
+    window.location.href = '/';
 }
 </script>
 

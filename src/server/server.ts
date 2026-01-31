@@ -42,9 +42,9 @@ app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
     sendPixelResponse(res);
 });
 
-app.get("/create-pixel", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
     const pixelId = createPixel();
-    const redirectUrl = PORT === 80 || PORT === 443 
+    const redirectUrl = PORT === 80 || PORT === 443
         ? `${req.protocol}://${HOST_NAME}/${pixelId}`
         : `${req.protocol}://${HOST_NAME}:${PORT}/${pixelId}`;
     res.redirect(redirectUrl);

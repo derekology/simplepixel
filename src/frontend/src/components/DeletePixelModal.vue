@@ -28,7 +28,7 @@ async function handleDelete() {
         });
 
         if (response.ok) {
-            window.location.href = '/create-pixel';
+            window.location.href = '/';
         } else {
             error.value = 'Failed to delete pixel';
             isDeleting.value = false;

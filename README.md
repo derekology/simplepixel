@@ -14,17 +14,20 @@ Privacy-first, simple visitor tracking for small businesses and individuals.
 ### One-Command Start (Easiest)
 
 **Linux/Mac:**
+
 ```bash
 chmod +x start.sh
 ./start.sh
 ```
 
 **Windows:**
+
 ```cmd
 start.bat
 ```
 
 This will automatically:
+
 - Check if Docker is installed and running
 - Create `.env` file from template
 - Build the Docker image
@@ -34,47 +37,56 @@ This will automatically:
 ### Using Docker Compose (Recommended)
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd simple-pixel
 ```
 
 2. (Optional) Configure environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env with your preferred settings
 ```
 
 3. Start the application:
+
 ```bash
 docker compose up -d
 ```
 
-4. Access the application at `http://localhost:3000`
+4. Access the application (defaults to `http://localhost:3000`, but will use your configured HOST_NAME and PORT from `.env`)
 
 ### Using Docker
 
 Build and run the container:
+
 ```bash
 docker build -t simple-pixel .
 docker run -d \
   -p 3000:3000 \
   -v simple-pixel-data:/app/data \
   -e HOST_NAME=localhost \
+  -e PORT=3000 \
   --name simple-pixel \
   simple-pixel
 ```
 
+**Note:** Adjust both the port mapping and environment variables as needed (e.g., `-p 8080:8080 -e HOST_NAME=example.com -e PORT=8080`).
+
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `3000` | Server port |
-| `HOST_NAME` | `localhost:3000` | Hostname for redirects |
-| `DB_PATH` | `/app/data/simple-pixel.db` | Database file path |
-| `CLEANUP_INTERVAL_MINUTES` | `60` | How often to check for expired pixels |
-| `PIXEL_EXPIRY_DAYS` | `7` | Days until pixel expires |
-| `NODE_ENV` | `production` | Node environment |
+## Environment Variables
+
+| Variable                   | Default                     | Description                           |
+| -------------------------- | --------------------------- | ------------------------------------- |
+| `PORT`                     | `3000`                      | Server port                           |
+| `HOST_NAME`                | `localhost:3000`            | Hostname for redirects                |
+| `DB_PATH`                  | `/app/data/simple-pixel.db` | Database file path                    |
+| `CLEANUP_INTERVAL_MINUTES` | `60`                        | How often to check for expired pixels |
+| `PIXEL_EXPIRY_DAYS`        | `7`                         | Days until pixel expires              |
+| `NODE_ENV`                 | `production`                | Node environment                      |
 
 ## Local Development
 
@@ -86,11 +98,13 @@ docker run -d \
 ### Setup
 
 1. Install backend dependencies:
+
 ```bash
 npm install
 ```
 
 2. Install frontend dependencies:
+
 ```bash
 cd src/frontend
 npm install
@@ -98,11 +112,13 @@ cd ../..
 ```
 
 3. Build the frontend:
+
 ```bash
 npm run build:frontend
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -119,7 +135,7 @@ npm start
 
 ## How It Works
 
-1. **Create a Pixel**: Visit `/create-pixel` to generate a unique tracking pixel
+1. **Create a Pixel**: Visit the home page to generate a unique tracking pixel
 2. **Embed the Pixel**: Add the pixel image to your website, email, or landing page
 3. **View Stats**: Access your pixel's dashboard to see visitor analytics
 
