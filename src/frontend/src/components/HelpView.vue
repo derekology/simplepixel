@@ -397,6 +397,7 @@ function copyToClipboard(text: string) {
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition-normal);
+    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .remove-btn {
