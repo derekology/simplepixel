@@ -41,6 +41,7 @@ RUN mkdir -p /app/data && \
     chown -R nodejs:nodejs /app
 
 COPY --from=backend-builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=frontend-builder --chown=nodejs:nodejs /app/frontend/dist ./dist/frontend/dist
 COPY --from=backend-builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 COPY --from=backend-builder --chown=nodejs:nodejs /app/package.json ./
 
