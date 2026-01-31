@@ -62,7 +62,7 @@ function copyToClipboard(text: string) {
                     <div class="icon">🔒</div>
                     <h3>Privacy First</h3>
                     <p>IP addresses are hashed immediately and never stored in plain text. User agent details are parsed
-                        for device type and browser, then discarded. Your visitors' privacy is protected.</p>
+                        for device type and browser, then discarded.</p>
                 </div>
                 <!-- <div class="value-prop">
                     <div class="icon">🏠</div>
@@ -84,7 +84,7 @@ function copyToClipboard(text: string) {
             <div class="step">
                 <h3>Step 1: Add Custom Parameters (Optional)</h3>
                 <p>Track additional information by adding parameters to your pixel URL. You can add up to {{ maxParams
-                }} parameters:</p>
+                    }} parameters:</p>
 
                 <div class="params-builder">
                     <div v-for="(param, index) in params" :key="index" class="param-row">
