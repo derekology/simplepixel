@@ -13,6 +13,8 @@ const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBAD
 const FRONTEND_DIST = path.join(__dirname, "../frontend/dist");
 const INDEX_HTML = path.join(FRONTEND_DIST, "index.html");
 
+app.set('trust proxy', true);
+
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
