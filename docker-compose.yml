@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  simple-pixel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simple-pixel
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST_NAME=localhost:3000
+      - DB_PATH=/app/data/simple-pixel.db
+      - CLEANUP_INTERVAL_MINUTES=60
+      - PIXEL_EXPIRY_DAYS=7
+    volumes:
+      - simple-pixel-data:/app/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000/p/health.gif', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  simple-pixel-data:
+    driver: local

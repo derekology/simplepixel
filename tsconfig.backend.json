@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/frontend/**/*",
+    "node_modules",
+    "dist"
+  ]
+}

@@ -7,7 +7,7 @@ const { startCleanupService } = require("../services/cleanupService");
 import type { Request, Response } from "express";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || "3000", 10);
 const HOST_NAME = process.env.HOST_NAME || `localhost:${PORT}`;
 const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=", "base64");
 
@@ -66,6 +66,10 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
     });
 });
 
-startCleanupService(60);
+startCleanupService();
 
-app.listen(PORT, () => console.log(`Simple Pixel server running on http://${HOST_NAME}`));
+app.listen(PORT, () => {
+    console.log(`Simple Pixel server running on http://${HOST_NAME}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Database: ${process.env.DB_PATH || 'default location'}`);
+});

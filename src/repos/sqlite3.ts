@@ -5,7 +5,13 @@ const { DB_SCHEMA } = require("../lib/schema");
 
 import type { IPixel, IPixelEvent, IPixelRepository } from "../types/types";
 
-const dbPath = path.join(__dirname, "../data/simple-pixel.db");
+const dbPath = process.env.DB_PATH || path.join(__dirname, "../data/simple-pixel.db");
+
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(dbPath);
 
 function tableExists(tableName: string): boolean {

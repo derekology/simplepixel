@@ -7,7 +7,7 @@ const { MAX_PARAMS } = require("../lib/schema");
 
 import type { IPixelEvent, IIpInfo, IUserAgentInfo } from "../types/types";
 
-const PIXEL_EXPIRY_DAYS = 7;
+const PIXEL_EXPIRY_DAYS = parseInt(process.env.PIXEL_EXPIRY_DAYS || "7", 10);
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function createPixel() {

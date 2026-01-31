@@ -1,0 +1,86 @@
+# Docker Ignore Patterns - Optimized Build
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation
+README.md
+LICENSE
+CHANGELOG.md
+docs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+*.sublime-*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+test/
+tests/
+coverage/
+.nyc_output/
+
+# Build artifacts (will be rebuilt in container)
+dist/
+build/
+out/
+
+# Dependencies (will be installed in container)
+node_modules/
+src/frontend/node_modules/
+
+# Frontend build output (will be built in container)
+src/frontend/dist/
+
+# Database files (will be created in container)
+*.db
+*.db-shm
+*.db-wal
+src/data/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Temp files
+tmp/
+temp/
+.temp/
+.cache/
+*.tmp
+*.pid
+*.seed
+*.pid.lock
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Docker files (not needed in image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
