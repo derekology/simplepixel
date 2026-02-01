@@ -41,6 +41,15 @@ function formatTime(ts: number) {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 }
 
+function getDeviceEmoji(deviceType: string | null): string {
+    if (!deviceType) return '🔳';
+    const type = deviceType.toLowerCase();
+    if (type.includes('mobile')) return '📱';
+    if (type.includes('tablet')) return '🔳';
+    if (type.includes('desktop') || type.includes('pc')) return '💻';
+    return '❔';
+}
+
 function openModal(event: PixelEvent) {
     selectedEvent.value = event;
 }
@@ -69,7 +78,8 @@ function closeModal() {
                     </div>
                 </div>
                 <div class="event-details">
-                    <div>📍{{ formatLocation(event.region, event.country) }}</div>
+                    <div><span class="device-emoji">{{ getDeviceEmoji(event.deviceType) }}</span>{{
+                        formatLocation(event.region, event.country) }}</div>
                 </div>
             </div>
         </div>
@@ -123,6 +133,11 @@ function closeModal() {
     justify-content: space-between;
     margin-bottom: var(--spacing-sm);
     align-items: center;
+}
+
+.device-emoji {
+    font-size: 0.8rem;
+    margin-right: 0.35rem;
 }
 
 .time {
