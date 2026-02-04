@@ -19,6 +19,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 10;
+  height: var(--top-banner-height)
 }
 
 .demo-banner-content {

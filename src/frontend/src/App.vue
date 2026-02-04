@@ -29,7 +29,7 @@
             </button>
           </div>
         </header>
-        <div class="dashboard">
+        <div class="dashboard" :class="{ 'has-demo-banner': isDemo }">
           <div class="sidebar">
             <Sidebar :events="stats.events" />
           </div>
@@ -330,12 +330,22 @@ onUnmounted(() => {
 .sidebar {
   width: 280px;
   height: calc(100vh - var(--top-bar-height));
-  overflow-y: scroll;
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .main-content {
   flex: 1;
   height: calc(100vh - var(--top-bar-height));
-  overflow-y: scroll;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.dashboard.has-demo-banner .sidebar {
+  height: calc(100vh - var(--top-bar-height) - var(--top-banner-height));
+}
+
+.dashboard.has-demo-banner .main-content {
+  height: calc(100vh - var(--top-bar-height) - var(--top-banner-height));
 }
 </style>
