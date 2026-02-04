@@ -259,7 +259,7 @@ onUnmounted(() => {
   box-shadow: var(--shadow-md);
   ;
   border-top: 5px solid var(--color-primary);
-  height: 50px;
+  height: var(--top-bar-height);
 }
 
 .logo {
@@ -329,12 +329,13 @@ onUnmounted(() => {
 
 .sidebar {
   width: 280px;
-  height: 100%;
-  overflow-y: auto;
+  height: calc(100vh - var(--top-bar-height));
+  overflow-y: scroll;
 }
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  height: calc(100vh - var(--top-bar-height));
+  overflow-y: scroll;
 }
 </style>

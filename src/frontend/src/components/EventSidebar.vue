@@ -1,3 +1,31 @@
+<template>
+    <div class="sidebar-container">
+        <div v-if="props.events.length === 0" class="no-events">
+            <p>No events yet</p>
+        </div>
+        <div v-else class="events-list">
+            <div v-for="(event, index) in events.slice().reverse()" :key="index" class="event-card"
+                @click="openModal(event)">
+                <div class="event-header">
+                    <div>
+                        <span class="time">{{ formatTime(event.timestamp) }}</span><br />
+                        <span class="date">{{ formatDate(event.timestamp) }}</span>
+                    </div>
+                    <div class="indicators">
+                        <span v-if="!event.isReturning" class="new-user">New visitor</span>
+                        <span v-if="event.notes" class="note-indicator" :title="'Warning: ' + event.notes">!</span>
+                    </div>
+                </div>
+                <div class="event-details">
+                    <div><span class="device-emoji">{{ getDeviceEmoji(event.deviceType) }}</span>{{
+                        formatLocation(event.region, event.country) }}</div>
+                </div>
+            </div>
+        </div>
+        <EventModal :event="selectedEvent" @close="closeModal" />
+    </div>
+</template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import EventModal from './EventModal.vue';
@@ -59,38 +87,11 @@ function closeModal() {
 }
 </script>
 
-<template>
-    <div class="sidebar-container">
-        <div v-if="props.events.length === 0" class="no-events">
-            <p>No events yet</p>
-        </div>
-        <div v-else class="events-list">
-            <div v-for="(event, index) in events.slice().reverse()" :key="index" class="event-card"
-                @click="openModal(event)">
-                <div class="event-header">
-                    <div>
-                        <span class="time">{{ formatTime(event.timestamp) }}</span><br />
-                        <span class="date">{{ formatDate(event.timestamp) }}</span>
-                    </div>
-                    <div class="indicators">
-                        <span v-if="!event.isReturning" class="new-user">New visitor</span>
-                        <span v-if="event.notes" class="note-indicator" :title="'Warning: ' + event.notes">!</span>
-                    </div>
-                </div>
-                <div class="event-details">
-                    <div><span class="device-emoji">{{ getDeviceEmoji(event.deviceType) }}</span>{{
-                        formatLocation(event.region, event.country) }}</div>
-                </div>
-            </div>
-        </div>
-        <EventModal :event="selectedEvent" @close="closeModal" />
-    </div>
-</template>
-
 <style scoped>
 .sidebar-container {
     padding: var(--spacing-sm);
-    height: 100%;
+    height: calc(100vh - var(--top-bar-height));
+    overflow-y: scroll;
 }
 
 .sidebar-title {

@@ -401,6 +401,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .dashboard {
     display: flex;
     flex-direction: column;
+    padding-bottom: var(--spacing-xl);
 }
 
 .stats-cards {
@@ -416,7 +417,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
     color: #000000;
     padding: var(--spacing-lg);
     border-radius: 12px;
-    box-shadow: 0 var(--shadow-sm) 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
     transition: transform 0.2s;
     display: flex;
     align-items: center;
@@ -519,6 +520,8 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
 .table-wrapper {
     overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .params-table {
@@ -528,6 +531,9 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 
 .params-table thead {
     background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .params-table th {

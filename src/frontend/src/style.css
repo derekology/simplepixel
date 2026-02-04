@@ -48,6 +48,8 @@
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
+
+    --top-bar-height: 50px;
 }
 
 * {
