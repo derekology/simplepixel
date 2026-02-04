@@ -2,7 +2,7 @@
   <div class="app-container">
     <MobileWarning v-if="isMobile" />
     <div v-else>
-      <DemoBanner v-if="!isDemo" />
+      <DemoBanner v-if="isDemo" />
 
       <NotFound v-if="pixelNotFound" />
 
