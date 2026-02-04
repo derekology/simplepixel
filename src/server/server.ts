@@ -82,7 +82,8 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
 
     res.render(INDEX_HTML, {
         pixelId,
-        stats: stats || null
+        stats: stats || null,
+        nodeEnv: process.env.NODE_ENV || 'development'
     });
 });
 
