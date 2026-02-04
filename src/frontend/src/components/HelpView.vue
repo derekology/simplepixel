@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 
 const props = defineProps<{
     pixelId?: string;
+    isDemo?: boolean;
 }>();
 
 const params = ref<Array<{ key: string; value: string }>>([
@@ -190,6 +191,24 @@ function copyToClipboard(text: string) {
                 <h3>Is there a limit on events?</h3>
                 <p>No artificial limits! Track as many events as you need within the 7-day window.</p>
             </div>
+        </section>
+
+        <section v-if="isDemo" class="help-section demo-info-section">
+            <h2>⚠️ This is a Demo Instance</h2>
+            <p class="demo-info-text">
+                You're currently using a demo version of Simple Pixel. While it's fully functional, we <strong>strongly
+                    recommend self-hosting</strong> your own instance to truly own your data and have full control over
+                privacy and retention policies.
+            </p>
+            <p class="demo-info-text">
+                Self-hosting Simple Pixel is straightforward with Docker and gives you complete control over your
+                analytics data. Instructions are available on the <a href="https://github.com/derekology/simple-pixel"
+                    target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+            </p>
+            <p class="demo-info-text">
+                Need help getting started? <a href="https://www.linkedin.com/in/derekology" target="_blank"
+                    rel="noopener noreferrer">Connect with me on LinkedIn.</a>
+            </p>
         </section>
 
         <section class="help-section disclaimer-section">
@@ -492,6 +511,22 @@ function copyToClipboard(text: string) {
     line-height: 1.7;
     color: #555;
     margin: 0;
+}
+
+.disclaimer-section {
+    border-left: 5px solid #666;
+}
+
+.demo-info-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 5px solid #2196f3;
+}
+
+.demo-info-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-md) 0;
 }
 
 .disclaimer-section {

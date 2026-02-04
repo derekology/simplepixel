@@ -6,7 +6,7 @@
 
       <NotFound v-if="pixelNotFound" />
 
-      <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" />
+      <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" :isDemo="isDemo" />
 
       <div v-else>
         <header class="top-bar">
@@ -34,7 +34,7 @@
             <Sidebar :events="stats.events" />
           </div>
           <div class="main-content">
-            <HelpView v-if="showHelp || stats.events.length === 0" :pixelId="pixelId" />
+            <HelpView v-if="showHelp || stats.events.length === 0" :pixelId="pixelId" :isDemo="isDemo" />
             <DashboardCharts v-else :summary="stats.summary" :events="stats.events" :pixel="stats.pixel" />
           </div>
         </div>

@@ -75,3 +75,13 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
     outline: none;
 }
+
+a {
+    color: #dd3333;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

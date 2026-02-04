@@ -4,8 +4,8 @@
       <span class="demo-icon">⚠️</span>
       <span class="demo-text">
         While this demo is usually fully functional, we recommend you
-        <a href="https://github.com/derekology/simple-pixel" target="_blank" rel="noopener noreferrer"
-          class="demo-link">host your own instance</a>.
+        <a href="https://github.com/derekology/simple-pixel" target="_blank" rel="noopener noreferrer">host your own
+          instance</a>.
       </span>
     </div>
   </div>
@@ -13,7 +13,7 @@
 
 <style scoped>
 .demo-banner {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   padding: 0.5rem 1rem;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -37,16 +37,5 @@
 .demo-text {
   font-size: 0.95rem;
   font-weight: 500;
-}
-
-.demo-link {
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.demo-link:hover {
-  opacity: 0.8;
-  text-decoration: underline;
 }
 </style>
