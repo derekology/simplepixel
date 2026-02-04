@@ -1,40 +1,46 @@
 <template>
-  <MobileWarning v-if="isMobile" />
+  <div class="app-container">
+    <MobileWarning v-if="isMobile" />
+    <div v-else>
+      <DemoBanner v-if="!isDemo" />
 
-  <NotFound v-else-if="pixelNotFound" />
+      <NotFound v-if="pixelNotFound" />
 
-  <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" />
+      <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" />
 
-  <div v-else class="app-container">
-    <header class="top-bar">
-      <h1 class="logo"><span class="logo-highlight">::</span>simple pixel<span class="byline" @click="goToWebsite">by
-          derekw</span></h1>
-      <div class="nav">
-        <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
-          <span v-if="showHelp">stats</span>
-          <span v-else>help / about</span>
-        </button>
-        <button class="nav-button" @click="navigateToNewPixel" title="New Pixel">
-          new pixel
-        </button>
-        <button class="nav-button" @click="exportToCSV" title="Export to CSV">
-          export csv
-        </button>
-        <button class="nav-button delete-button" @click="showDeleteModal = true" title="Delete Pixel">
-          delete pixel
-        </button>
-      </div>
-    </header>
-    <div class="dashboard">
-      <div class="sidebar">
-        <Sidebar :events="stats.events" />
-      </div>
-      <div class="main-content">
-        <HelpView v-if="showHelp || stats.events.length === 0" :pixelId="pixelId" />
-        <DashboardCharts v-else :summary="stats.summary" :events="stats.events" :pixel="stats.pixel" />
+      <div v-else>
+        <header class="top-bar">
+          <h1 class="logo"><span class="logo-highlight">::</span>simple pixel<span class="byline"
+              @click="goToWebsite">by
+              derekw</span></h1>
+          <div class="nav">
+            <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
+              <span v-if="showHelp">stats</span>
+              <span v-else>help / about</span>
+            </button>
+            <button class="nav-button" @click="navigateToNewPixel" title="New Pixel">
+              new pixel
+            </button>
+            <button class="nav-button" @click="exportToCSV" title="Export to CSV">
+              export csv
+            </button>
+            <button class="nav-button delete-button" @click="showDeleteModal = true" title="Delete Pixel">
+              delete pixel
+            </button>
+          </div>
+        </header>
+        <div class="dashboard">
+          <div class="sidebar">
+            <Sidebar :events="stats.events" />
+          </div>
+          <div class="main-content">
+            <HelpView v-if="showHelp || stats.events.length === 0" :pixelId="pixelId" />
+            <DashboardCharts v-else :summary="stats.summary" :events="stats.events" :pixel="stats.pixel" />
+          </div>
+        </div>
+        <DeletePixelModal v-if="showDeleteModal" :pixelId="pixelId" @close="showDeleteModal = false" />
       </div>
     </div>
-    <DeletePixelModal v-if="showDeleteModal" :pixelId="pixelId" @close="showDeleteModal = false" />
   </div>
 </template>
 
@@ -45,6 +51,7 @@ import HelpView from './components/HelpView.vue';
 import DeletePixelModal from './components/DeletePixelModal.vue';
 import NotFound from './components/NotFound.vue';
 import MobileWarning from './components/MobileWarning.vue';
+import DemoBanner from './components/DemoBanner.vue';
 import { onMounted, onUnmounted, reactive, ref, computed } from 'vue';
 
 interface Stats {
@@ -75,6 +82,9 @@ const isMobile = computed(() => screenWidth.value < MOBILE_BREAKPOINT);
 
 const initialStats: Stats = (window as any).__INITIAL_STATS__;
 const pixelId: string = (window as any).__PIXEL_ID__;
+const nodeEnv: string = (window as any).__NODE_ENV__ || 'development';
+
+const isDemo = computed(() => nodeEnv === 'demo');
 
 function updateScreenWidth() {
   screenWidth.value = window.innerWidth;
