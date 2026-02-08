@@ -76,43 +76,21 @@ h1 {
 }
 
 .info-box {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    background: var(--color-bg-warning-gradient);
     border-radius: 8px;
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
-    border-left: 5px solid #ff9800;
+    border-left: 5px solid var(--color-warning);
 }
 
 .info-box p {
     margin: var(--spacing-sm) 0;
     font-size: 0.9rem;
-    color: #555;
+    color: var(--color-text-secondary);
 }
 
 .current-width {
     font-weight: bold;
-    color: #4a90e2;
-}
-
-.create-btn {
-    padding: 0.75rem var(--spacing-lg);
-    font-size: var(--spacing-md);
-    font-weight: 600;
-    color: white;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 var(--shadow-sm) 12px rgba(102, 126, 234, 0.4);
-}
-
-.create-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
-}
-
-.create-btn:active {
-    transform: translateY(0);
+    color: var(--color-primary);
 }
 </style>

@@ -305,7 +305,7 @@ function copyToClipboard(text: string) {
 .value-prop p {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #555;
+    color: var(--color-text-secondary);
     margin: 0;
 }
 
@@ -326,13 +326,13 @@ function copyToClipboard(text: string) {
 .step p {
     font-size: var(--spacing-md);
     line-height: 1.6;
-    color: #555;
+    color: var(--color-text-secondary);
     margin-bottom: var(--spacing-md);
 }
 
 .step ul {
     margin: var(--spacing-sm) 0 0 var(--spacing-lg);
-    color: #555;
+    color: var(--color-text-secondary);
     line-height: 1.8;
 }
 
@@ -344,8 +344,8 @@ function copyToClipboard(text: string) {
 }
 
 .code-box {
-    background: #f5f5f5;
-    border: 1px solid #ddd;
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     padding: var(--spacing-md);
     margin: var(--spacing-md) 0;
@@ -378,7 +378,7 @@ function copyToClipboard(text: string) {
 }
 
 .params-builder {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     margin: var(--spacing-md) 0;
@@ -457,7 +457,7 @@ function copyToClipboard(text: string) {
 .examples {
     margin-top: var(--spacing-lg);
     padding: var(--spacing-md);
-    background: #e8f4f8;
+    background: var(--color-bg-light);
     border-radius: 6px;
 }
 
@@ -477,12 +477,12 @@ function copyToClipboard(text: string) {
     border-radius: 3px;
     font-family: 'Courier New', monospace;
     font-size: 0.85rem;
-    color: #d32f2f;
+    color: var(--color-error);
 }
 
 .warning-section {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    border-left: 5px solid #ff9800;
+    background: var(--color-bg-warning-gradient);
+    border-left: 5px solid var(--color-warning);
 }
 
 .warning-text {
@@ -509,17 +509,17 @@ function copyToClipboard(text: string) {
 .faq-item p {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: #555;
+    color: var(--color-text-secondary);
     margin: 0;
 }
 
 .disclaimer-section {
-    border-left: 5px solid #666;
+    border-left: 5px solid var(--color-text-secondary);
 }
 
 .demo-info-section {
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    border-left: 5px solid #2196f3;
+    background: var(--color-bg-info-gradient);
+    border-left: 5px solid var(--color-primary);
 }
 
 .demo-info-text {
@@ -530,13 +530,13 @@ function copyToClipboard(text: string) {
 }
 
 .disclaimer-section {
-    border-left: 5px solid #666;
+    border-left: 5px solid var(--color-text-secondary);
 }
 
 .disclaimer-text {
     font-size: 0.9rem;
     line-height: 1.7;
-    color: #555;
+    color: var(--color-text-secondary);
     margin: 0 0 var(--spacing-md) 0;
 }
 

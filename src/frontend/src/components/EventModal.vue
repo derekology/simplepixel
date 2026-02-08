@@ -166,7 +166,7 @@ function formatNotes(notes: string | null) {
 }
 
 .close-btn:hover {
-    background-color: #f0f0f0;
+    background-color: var(--color-bg-light);
 }
 
 .detail-section {
@@ -181,7 +181,7 @@ function formatNotes(notes: string | null) {
     margin: 0 0 var(--spacing-md) 0;
     font-size: 1.var(--spacing-md);
     color: var(--color-text-primary);
-    border-bottom: 2px solid #e5e5e5;
+    border-bottom: 2px solid var(--color-border);
     padding-bottom: var(--spacing-sm);
 }
 
@@ -192,7 +192,7 @@ function formatNotes(notes: string | null) {
 
 .label {
     font-weight: 600;
-    color: var(--color-text-light);
+    color: var(--color-text-secondary);
     min-width: 150px;
 }
 
@@ -202,7 +202,7 @@ function formatNotes(notes: string | null) {
 
 .notes-content {
     padding: var(--spacing-md);
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    background: var(--color-bg-warning-gradient);
     border-radius: var(--radius-sm);
     color: var(--color-text-primary);
     white-space: pre-wrap;
@@ -217,7 +217,7 @@ function formatNotes(notes: string | null) {
 .param-row {
     display: flex;
     padding: 0.75rem;
-    border-bottom: #ccc solid 1px;
+    border-bottom: var(--color-border) solid 1px;
 }
 
 .param-key {

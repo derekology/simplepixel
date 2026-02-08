@@ -51,7 +51,7 @@ h1 {
 
 .message {
     font-size: 1.var(--spacing-md);
-    color: #555;
+    color: var(--color-text-secondary);
     margin: 0 0 var(--spacing-md) 0;
     line-height: 1.6;
 }
@@ -62,8 +62,8 @@ h1 {
     margin: 0 0 var(--spacing-xl) 0;
     line-height: 1.6;
     padding: var(--spacing-md);
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    border-left: 5px solid #ff9800;
+    background: var(--color-bg-warning-gradient);
+    border-left: 5px solid var(--color-warning);
     border-radius: var(--radius-sm);
 }
 
@@ -72,7 +72,7 @@ h1 {
     font-size: 1.var(--spacing-md);
     font-weight: 600;
     color: white;
-    background: #dd3333;
+    background: var(--color-primary);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -80,7 +80,7 @@ h1 {
 }
 
 .create-btn:hover {
-    background-color: #bb2a2a;
+    background-color: var(--color-primary-dark);
 }
 
 .create-btn:active {

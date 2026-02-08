@@ -36,7 +36,6 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.get("/favicon.ico", (req: Request, res: Response) => {
     const faviconPath = path.join(FRONTEND_DIST, "favicon.ico");
-    console.log(`Favicon requested. Path: ${faviconPath}`);
     res.sendFile(faviconPath, (err) => {
         if (err) {
             console.error('Favicon error:', err);

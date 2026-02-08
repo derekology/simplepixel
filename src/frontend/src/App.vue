@@ -14,10 +14,6 @@
               @click="goToWebsite">by
               derekw</span></h1>
           <div class="nav">
-            <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
-              <span v-if="showHelp">stats</span>
-              <span v-else>help / about</span>
-            </button>
             <button class="nav-button" @click="navigateToNewPixel" title="New Pixel">
               new pixel
             </button>
@@ -26,6 +22,10 @@
             </button>
             <button class="nav-button delete-button" @click="showDeleteModal = true" title="Delete Pixel">
               delete pixel
+            </button>
+            <button class="nav-button" @click="showHelp = !showHelp" :title="showHelp ? 'Stats' : 'Help'">
+              <span v-if="showHelp">stats</span>
+              <span v-else>help / about</span>
             </button>
           </div>
         </header>

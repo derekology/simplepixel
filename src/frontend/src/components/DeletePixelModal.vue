@@ -118,7 +118,7 @@ async function handleDelete() {
 .modal-header h2 {
     margin: 0;
     font-size: var(--spacing-lg);
-    color: #d32f2f;
+    color: var(--color-text-primary);
 }
 
 .close-btn {
@@ -126,7 +126,7 @@ async function handleDelete() {
     border: none;
     font-size: var(--spacing-xl);
     cursor: pointer;
-    color: var(--color-text-light);
+    color: var(--color-text-secondary);
     line-height: 1;
     padding: 0;
     width: 32px;
@@ -139,7 +139,7 @@ async function handleDelete() {
 }
 
 .close-btn:hover:not(:disabled) {
-    background-color: #f0f0f0;
+    background-color: var(--color-bg-light);
 }
 
 .close-btn:disabled {
@@ -155,8 +155,8 @@ async function handleDelete() {
     display: flex;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    border-left: 5px solid #ff9800;
+    background: var(--color-bg-warning-gradient);
+    border-left: 5px solid var(--color-warning);
     border-radius: var(--radius-sm);
     margin-bottom: var(--spacing-lg);
 }
@@ -179,14 +179,14 @@ async function handleDelete() {
 .confirm-section label {
     display: block;
     margin-bottom: var(--spacing-sm);
-    color: #555;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
 }
 
 .confirm-section input {
     width: 100%;
     padding: 0.75rem;
-    border: 2px solid #ddd;
+    border: 2px solid var(--color-border);
     border-radius: 6px;
     font-size: var(--spacing-md);
     transition: border-color 0.2s;
@@ -194,17 +194,17 @@ async function handleDelete() {
 
 .confirm-section input:focus {
     outline: none;
-    border-color: #d32f2f;
+    border-color: var(--color-danger);
 }
 
 .confirm-section input:disabled {
-    background-color: #f5f5f5;
+    background-color: var(--color-bg-light);
     cursor: not-allowed;
 }
 
 .error-message {
-    color: #d32f2f;
-    background-color: #ffebee;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-light);
     padding: 0.75rem;
     border-radius: var(--radius-sm);
     margin-bottom: var(--spacing-md);
@@ -229,25 +229,25 @@ async function handleDelete() {
 }
 
 .btn-cancel {
-    background-color: #f5f5f5;
+    background-color: var(--color-bg-light);
     color: var(--color-text-primary);
 }
 
 .btn-cancel:hover:not(:disabled) {
-    background-color: #e0e0e0;
+    background-color: var(--color-bg);
 }
 
 .btn-delete {
-    background-color: #d32f2f;
-    color: white;
+    background-color: var(--color-danger);
+    color: var(--color-text-primary);
 }
 
 .btn-delete:hover:not(:disabled) {
-    background-color: #b71c1c;
+    background-color: var(--color-danger-dark);
 }
 
 .btn-delete:disabled {
-    background-color: #e0e0e0;
+    background-color: var(--color-bg);
     color: var(--color-text-lighter);
     cursor: not-allowed;
 }
