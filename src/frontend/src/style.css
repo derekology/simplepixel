@@ -23,6 +23,7 @@
     --color-border-light: var(--border-light);
     
     --color-success: var(--status-success);
+    --color-info: var(--status-info);
     --color-warning: var(--status-warning);
     --color-warning-bg: var(--status-warning-bg);
     --color-warning-bg-alt: var(--status-warning-bg-alt);

@@ -378,7 +378,6 @@ function copyToClipboard(text: string) {
 }
 
 .params-builder {
-    background: var(--color-bg-light);
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     margin: var(--spacing-md) 0;
@@ -519,7 +518,7 @@ function copyToClipboard(text: string) {
 
 .demo-info-section {
     background: var(--color-bg-info-gradient);
-    border-left: 5px solid var(--color-primary);
+    border-left: 5px solid var(--color-info);
 }
 
 .demo-info-text {
