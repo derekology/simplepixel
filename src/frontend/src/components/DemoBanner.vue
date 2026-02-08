@@ -18,7 +18,7 @@
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 10;
+  z-index: 1000;
   height: var(--top-banner-height)
 }
 

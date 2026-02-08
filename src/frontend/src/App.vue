@@ -2,8 +2,6 @@
   <div class="app-container">
     <MobileWarning v-if="isMobile" />
     <div v-else>
-      <DemoBanner v-if="isDemo" />
-
       <NotFound v-if="pixelNotFound" />
 
       <HelpView v-else-if="stats.events.length === 0" :pixelId="pixelId" :isDemo="isDemo" />
@@ -29,6 +27,7 @@
             </button>
           </div>
         </header>
+        <DemoBanner v-if="isDemo" />
         <div class="dashboard" :class="{ 'has-demo-banner': isDemo }">
           <div class="sidebar">
             <Sidebar :events="stats.events" />
