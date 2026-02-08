@@ -370,7 +370,7 @@ function copyToClipboard(text: string) {
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.85rem;
-    transition: var(--transition-normal);
+    transition: var(--slow-transition);
 }
 
 .copy-btn:hover {
@@ -414,7 +414,7 @@ function copyToClipboard(text: string) {
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: var(--transition-normal);
+    transition: var(--slow-transition);
     padding: var(--spacing-xs) var(--spacing-sm);
 }
 
@@ -436,7 +436,7 @@ function copyToClipboard(text: string) {
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.95rem;
-    transition: var(--transition-normal);
+    transition: var(--slow-transition);
 }
 
 .add-btn:hover {

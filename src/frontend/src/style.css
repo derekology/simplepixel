@@ -37,6 +37,8 @@
 
     --top-bar-height: var(--height-topbar);
     --top-banner-height: var(--height-banner);
+
+    --slow-transition: var(--transition-slow);
 }
 
 * {

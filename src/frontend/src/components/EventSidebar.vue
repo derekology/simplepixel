@@ -121,7 +121,7 @@ function closeModal() {
     padding: 0.75rem;
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: var(--transition-normal);
+    transition: var(--slow-transition);
     box-shadow: var(--shadow-sm);
 }
 
