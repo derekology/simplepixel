@@ -45,13 +45,13 @@ function createNewPixel() {
 
 h1 {
     font-size: var(--spacing-xl);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0 0 var(--spacing-md) 0;
 }
 
 .message {
     font-size: 1.var(--spacing-md);
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     margin: 0 0 var(--spacing-md) 0;
     line-height: 1.6;
 }

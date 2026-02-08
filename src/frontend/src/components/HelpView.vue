@@ -253,7 +253,7 @@ function copyToClipboard(text: string) {
 
 .help-container h1 {
     font-size: 2.5rem;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin-bottom: var(--spacing-sm);
     text-align: center;
 }
@@ -298,14 +298,14 @@ function copyToClipboard(text: string) {
 
 .value-prop h3 {
     font-size: 1.var(--spacing-xl);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: var(--spacing-sm) 0;
 }
 
 .value-prop p {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     margin: 0;
 }
 
@@ -319,20 +319,20 @@ function copyToClipboard(text: string) {
 
 .step h3 {
     font-size: 1.3rem;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0 0 0.75rem 0;
 }
 
 .step p {
     font-size: var(--spacing-md);
     line-height: 1.6;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     margin-bottom: var(--spacing-md);
 }
 
 .step ul {
     margin: var(--spacing-sm) 0 0 var(--spacing-lg);
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     line-height: 1.8;
 }
 
@@ -355,7 +355,7 @@ function copyToClipboard(text: string) {
 }
 
 .code-box code {
-    color: var(--color-text-primary);
+    color: var(--color-text);
     font-size: 0.9rem;
 }
 
@@ -450,7 +450,7 @@ function copyToClipboard(text: string) {
 .generated-url strong {
     display: block;
     margin-bottom: var(--spacing-sm);
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .examples {
@@ -462,7 +462,7 @@ function copyToClipboard(text: string) {
 
 .examples h4 {
     margin: 0 0 0.75rem 0;
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .examples ul {
@@ -487,7 +487,7 @@ function copyToClipboard(text: string) {
 .warning-text {
     font-size: 1.05rem;
     line-height: 1.8;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0;
 }
 
@@ -501,19 +501,19 @@ function copyToClipboard(text: string) {
 
 .faq-item h3 {
     font-size: 1.var(--spacing-md);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0 0 var(--spacing-sm) 0;
 }
 
 .faq-item p {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     margin: 0;
 }
 
 .disclaimer-section {
-    border-left: 5px solid var(--color-text-secondary);
+    border-left: 5px solid var(--color-text-light);
 }
 
 .demo-info-section {
@@ -524,18 +524,18 @@ function copyToClipboard(text: string) {
 .demo-info-text {
     font-size: 1.05rem;
     line-height: 1.8;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0 0 var(--spacing-md) 0;
 }
 
 .disclaimer-section {
-    border-left: 5px solid var(--color-text-secondary);
+    border-left: 5px solid var(--color-text-light);
 }
 
 .disclaimer-text {
     font-size: 0.9rem;
     line-height: 1.7;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     margin: 0 0 var(--spacing-md) 0;
 }
 

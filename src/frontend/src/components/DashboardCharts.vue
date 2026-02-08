@@ -477,7 +477,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .time-series-container h3 {
     margin: 0 0 var(--spacing-md) 0;
     font-size: 1.var(--spacing-xl);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     border-bottom: 2px solid #e5e5e5;
     padding-bottom: var(--spacing-sm);
 }
@@ -492,7 +492,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .chart-container h3 {
     margin: 0 0 var(--spacing-md) 0;
     font-size: 1.var(--spacing-xl);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     border-bottom: 2px solid #e5e5e5;
     padding-bottom: var(--spacing-sm);
 }
@@ -513,7 +513,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 .params-table-container h3 {
     margin: 0 0 var(--spacing-md) 0;
     font-size: 1.var(--spacing-xl);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     border-bottom: 2px solid #e5e5e5;
     padding-bottom: var(--spacing-sm);
 }
@@ -559,7 +559,7 @@ watch([() => props.summary, () => props.events, () => props.pixel], () => {
 }
 
 .param-value {
-    color: var(--color-text-primary);
+    color: var(--color-text);
     font-family: monospace;
 }
 

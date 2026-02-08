@@ -57,7 +57,7 @@ onUnmounted(() => {
 
 h1 {
     font-size: 1.75rem;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     margin: 0 0 var(--spacing-md) 0;
 }
 
@@ -86,7 +86,7 @@ h1 {
 .info-box p {
     margin: var(--spacing-sm) 0;
     font-size: 0.9rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
 }
 
 .current-width {

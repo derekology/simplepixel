@@ -145,7 +145,7 @@ function formatNotes(notes: string | null) {
 .modal-header h2 {
     margin: 0;
     font-size: var(--spacing-lg);
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .close-btn {
@@ -180,7 +180,7 @@ function formatNotes(notes: string | null) {
 .detail-section h3 {
     margin: 0 0 var(--spacing-md) 0;
     font-size: 1.var(--spacing-md);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     border-bottom: 2px solid var(--color-border);
     padding-bottom: var(--spacing-sm);
 }
@@ -192,19 +192,19 @@ function formatNotes(notes: string | null) {
 
 .label {
     font-weight: 600;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     min-width: 150px;
 }
 
 .value {
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .notes-content {
     padding: var(--spacing-md);
     background: var(--color-bg-warning-gradient);
     border-radius: var(--radius-sm);
-    color: var(--color-text-primary);
+    color: var(--color-text);
     white-space: pre-wrap;
 }
 
@@ -227,7 +227,7 @@ function formatNotes(notes: string | null) {
 }
 
 .param-value {
-    color: var(--color-text-primary);
+    color: var(--color-text);
     word-break: break-word;
 }
 

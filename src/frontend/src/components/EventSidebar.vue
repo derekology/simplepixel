@@ -187,6 +187,6 @@ function closeModal() {
 
 .event-details {
     font-size: 0.85rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
 }
 </style>

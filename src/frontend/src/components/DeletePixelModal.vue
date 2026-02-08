@@ -118,7 +118,7 @@ async function handleDelete() {
 .modal-header h2 {
     margin: 0;
     font-size: var(--spacing-lg);
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .close-btn {
@@ -126,7 +126,7 @@ async function handleDelete() {
     border: none;
     font-size: var(--spacing-xl);
     cursor: pointer;
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     line-height: 1;
     padding: 0;
     width: 32px;
@@ -168,7 +168,7 @@ async function handleDelete() {
 
 .warning-text {
     margin: 0;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     line-height: 1.6;
 }
 
@@ -179,7 +179,7 @@ async function handleDelete() {
 .confirm-section label {
     display: block;
     margin-bottom: var(--spacing-sm);
-    color: var(--color-text-secondary);
+    color: var(--color-text-light);
     font-size: 0.95rem;
 }
 
@@ -203,7 +203,7 @@ async function handleDelete() {
 }
 
 .error-message {
-    color: var(--color-text-primary);
+    color: var(--color-text);
     background-color: var(--color-bg-light);
     padding: 0.75rem;
     border-radius: var(--radius-sm);
@@ -230,7 +230,7 @@ async function handleDelete() {
 
 .btn-cancel {
     background-color: var(--color-bg-light);
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .btn-cancel:hover:not(:disabled) {
@@ -239,7 +239,7 @@ async function handleDelete() {
 
 .btn-delete {
     background-color: var(--color-danger);
-    color: var(--color-text-primary);
+    color: var(--color-text);
 }
 
 .btn-delete:hover:not(:disabled) {
