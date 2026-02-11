@@ -239,7 +239,7 @@ async function handleDelete() {
 
 .btn-delete {
     background-color: var(--color-danger);
-    color: var(--color-text);
+    color: var(--color-text-white);
 }
 
 .btn-delete:hover:not(:disabled) {

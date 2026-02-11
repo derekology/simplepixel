@@ -119,6 +119,14 @@ npm run build:frontend
 npm run dev
 ```
 
+The server will start with hot-reload enabled. Any changes to TypeScript files will automatically restart the server.
+
+**Alternative commands:**
+- `npm run dev:nodemon` - Use nodemon for watching
+- `npm run dev:inspect` - Start with debugger attached
+
+**Note:** If you encounter issues with nodemon or TypeScript imports, see [DEV_SETUP.md](DEV_SETUP.md) for detailed explanation and solutions.
+
 ## Building for Production
 
 ```bash

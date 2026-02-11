@@ -1,10 +1,14 @@
-const express = require("express");
-const path = require("path");
-
-const { createPixel, recordPixelEvent, getPixelStats, deletePixel } = require("../services/pixelService");
-const { startCleanupService } = require("../services/cleanupService");
-
+import express from "express";
+import path from "path";
+import ejs from "ejs";
+import { fileURLToPath } from "url";
+import repository from "../repos/sqlite3.js";
+import { PixelService } from "../services/pixelService.js";
+import { CleanupService } from "../services/cleanupService.js";
 import type { Request, Response } from "express";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3000", 10);
@@ -13,9 +17,12 @@ const PIXEL_BUFFER = Buffer.from("R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBAD
 const FRONTEND_DIST = path.join(__dirname, "../frontend/dist");
 const INDEX_HTML = path.join(FRONTEND_DIST, "index.html");
 
+const pixelService = new PixelService(repository);
+const cleanupService = new CleanupService(repository);
+
 app.set('trust proxy', true);
 
-app.engine('html', require('ejs').renderFile);
+app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 app.use("/frontend", express.static(FRONTEND_DIST));
@@ -51,33 +58,40 @@ app.get("/p/:pixelId.gif", (req: Request, res: Response) => {
         return res.send(PIXEL_BUFFER);
     }
 
-    recordPixelEvent(pixelId, req.ip, req.get("User-Agent") || "", req.query as any);
+    pixelService.recordPixelEvent(pixelId, req.ip || "", req.get("User-Agent") || "", req.query as any);
 
     sendPixelResponse(res);
 });
 
 app.get("/", (req: Request, res: Response) => {
-    const pixelId = createPixel();
+    const pixelId = pixelService.createPixel();
     const protocol = req.protocol;
     const host = req.get('host');
     res.redirect(`${protocol}://${host}/${pixelId}`);
 });
 
 app.get("/stats/:pixelId", (req: Request, res: Response) => {
-    const stats = getPixelStats(req.params.pixelId);
+    const pixelId = req.params.pixelId;
+    if (!pixelId || Array.isArray(pixelId)) return handleNotFound(res);
+    const stats = pixelService.getPixelStats(pixelId);
     if (!stats) return handleNotFound(res);
     res.json(stats);
 });
 
 app.post("/delete/:pixelId", (req: Request, res: Response) => {
-    const deleted = deletePixel(req.params.pixelId);
+    const pixelId = req.params.pixelId;
+    if (!pixelId || Array.isArray(pixelId)) return handleNotFound(res);
+    const deleted = pixelService.deletePixel(pixelId);
     if (!deleted) return handleNotFound(res);
     res.json({ success: true });
 });
 
 app.get("/:pixelId", async (req: Request, res: Response) => {
-    const { pixelId } = req.params;
-    const stats = await getPixelStats(pixelId);
+    const pixelId = req.params.pixelId;
+    if (!pixelId || Array.isArray(pixelId)) {
+        return res.status(400).send("Invalid pixel ID");
+    }
+    const stats = await pixelService.getPixelStats(pixelId);
 
     res.render(INDEX_HTML, {
         pixelId,
@@ -86,10 +100,11 @@ app.get("/:pixelId", async (req: Request, res: Response) => {
     });
 });
 
-startCleanupService();
+cleanupService.start();
 
 app.listen(PORT, () => {
     console.log(`Simple Pixel server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`Database: ${process.env.DB_PATH || 'default location'}`);
+    console.log(`Hot reload enabled via tsx watch`);
 });

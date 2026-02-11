@@ -1,9 +1,12 @@
-const Database = require("better-sqlite3");
-const path = require("path");
-const fs = require("fs");
-const { DB_SCHEMA } = require("../lib/schema");
+import Database from "better-sqlite3";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { DB_SCHEMA } from "../lib/schema.js";
+import type { IPixel, IPixelEvent, IPixelRepository } from "../types/types.js";
 
-import type { IPixel, IPixelEvent, IPixelRepository } from "../types/types";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const dbPath = process.env.DB_PATH || path.join(__dirname, "../data/simple-pixel.db");
 
@@ -21,10 +24,10 @@ function tableExists(tableName: string): boolean {
 }
 
 function getExistingColumns(tableName: string): string[] {
-    return db
+    const rows = db
         .prepare(`PRAGMA table_info(${tableName})`)
-        .all()
-        .map((col: { name: string }) => col.name);
+        .all() as Array<{ name: string }>;
+    return rows.map(col => col.name);
 }
 
 function createTable(tableName: string, columns: Record<string, string>) {
@@ -121,20 +124,20 @@ class SqliteRepository implements IPixelRepository {
     getEventsByPixelId(pixelId: string): IPixelEvent[] {
         const rows = db
             .prepare("SELECT * FROM events WHERE pixel_id = ? ORDER BY timestamp ASC")
-            .all(pixelId);
+            .all(pixelId) as any[];
 
         return rows.map((row: any) => ({
             id: row.id,
             pixel_id: row.pixel_id,
             timestamp: row.timestamp,
             ip_hash: row.ip_hash,
-            country: row.country,
-            region: row.region,
-            browser: row.browser,
-            os: row.os,
-            device_type: row.device_type,
+            country: row.country ?? null,
+            region: row.region ?? null,
+            browser: row.browser ?? null,
+            os: row.os ?? null,
+            device_type: row.device_type ?? null,
             params: parseEventParams(row.params),
-            notes: row.notes
+            notes: row.notes ?? null
         }));
     }
 
@@ -152,15 +155,11 @@ class SqliteRepository implements IPixelRepository {
     }
 
     getAllPixels(): IPixel[] {
-        const rows = db.prepare("SELECT * FROM pixels").all();
+        const rows = db.prepare("SELECT * FROM pixels").all() as IPixel[];
         return rows;
-    }
-
-    get db() {
-        return db;
     }
 }
 
 setupDatabase();
 
-module.exports = new SqliteRepository();
+export default new SqliteRepository();

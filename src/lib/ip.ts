@@ -1,7 +1,8 @@
-const crypto = require("crypto");
-const geoip = require("geoip-lite");
+import crypto from "crypto";
+import geoipLite from "geoip-lite";
+import type { IIpInfo } from "../types/types.js";
 
-import type { IIpInfo } from "../types/types";
+const geoip = geoipLite as any;
 
 const COUNTRY_CODE_TO_NAME: Record<string, string> = {
     "AF": "Afghanistan",
@@ -204,6 +205,4 @@ function processIp(ip: string): IIpInfo {
     };
 }
 
-module.exports = {
-    processIp
-};
+export { processIp };

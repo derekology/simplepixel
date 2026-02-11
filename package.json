@@ -3,16 +3,23 @@
   "version": "1.0.0",
   "description": "Privacy-first, simple visitor tracking for small businesses and individuals",
   "main": "dist/server/server.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build:frontend": "cd src/frontend && npm install && npm run build",
     "build:backend": "tsc -p tsconfig.backend.json",
     "build": "npm run build:frontend && npm run build:backend",
     "start": "node dist/server/server.js",
-    "dev": "ts-node src/server/server.ts",
+    "dev": "tsx watch src/server/server.ts",
+    "dev:nodemon": "nodemon",
+    "dev:inspect": "tsx watch --inspect src/server/server.ts",
     "clean": "rimraf dist"
   },
-  "keywords": ["pixel", "tracking", "analytics", "privacy"],
+  "keywords": [
+    "pixel",
+    "tracking",
+    "analytics",
+    "privacy"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -27,8 +34,10 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",
     "@types/node": "^22.14.1",
+    "nodemon": "^3.1.11",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

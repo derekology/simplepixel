@@ -1,6 +1,6 @@
-const MAX_PARAMS = 10;
+export const MAX_PARAMS = 10;
 
-const DB_SCHEMA = {
+export const DB_SCHEMA = {
     tables: {
         pixels: {
             name: 'pixels',
@@ -28,5 +28,3 @@ const DB_SCHEMA = {
         }
     }
 };
-
-module.exports = { DB_SCHEMA, MAX_PARAMS };

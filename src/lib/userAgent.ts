@@ -1,6 +1,5 @@
-const UAParser = require("ua-parser-js");
-
-import type { IUserAgentInfo } from "../types/types";
+import { UAParser } from "ua-parser-js";
+import type { IUserAgentInfo } from "../types/types.js";
 
 function processUserAgent(userAgent: string): IUserAgentInfo {
     const parser = new UAParser(userAgent);
@@ -19,12 +18,10 @@ function processUserAgent(userAgent: string): IUserAgentInfo {
     // const browser = browserName && browserVersion ? `${browserName} ${browserVersion}` : browserName;
 
     return {
-        browser: result.browser.name ?? null,
-        os: result.os.name ?? null,
+        browser: result.browser.name || "Unknown",
+        os: result.os.name || "Unknown",
         deviceType
     };
 }
 
-module.exports = {
-    processUserAgent
-};
+export { processUserAgent };

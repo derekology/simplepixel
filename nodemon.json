@@ -1,0 +1,9 @@
+{
+  "watch": ["src"],
+  "ext": "ts,json",
+  "ignore": ["src/frontend/**/*", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "exec": "tsx src/server/server.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
