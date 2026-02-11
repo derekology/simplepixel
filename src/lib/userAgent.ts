@@ -10,6 +10,14 @@ function processUserAgent(userAgent: string): IUserAgentInfo {
     if (result.device.type === "mobile") deviceType = "Mobile";
     else if (result.device.type === "tablet") deviceType = "Tablet";
 
+    // const osName = result.os.name ?? null;
+    // const osVersion = result.os.version ?? null;
+    // const os = osName && osVersion ? `${osName} ${osVersion}` : osName;
+
+    // const browserName = result.browser.name ?? null;
+    // const browserVersion = result.browser.version ?? null;
+    // const browser = browserName && browserVersion ? `${browserName} ${browserVersion}` : browserName;
+
     return {
         browser: result.browser.name ?? null,
         os: result.os.name ?? null,
