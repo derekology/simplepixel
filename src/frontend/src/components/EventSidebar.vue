@@ -90,7 +90,6 @@ function closeModal() {
 <style scoped>
 .sidebar-container {
     padding: var(--spacing-sm);
-    height: calc(100vh - var(--top-bar-height));
     overflow-y: scroll;
 }
 
