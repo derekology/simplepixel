@@ -39,7 +39,7 @@ This will automatically:
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/derekology/simple-pixel
 cd simple-pixel
 ```
 
@@ -122,6 +122,7 @@ npm run dev
 The server will start with hot-reload enabled. Any changes to TypeScript files will automatically restart the server.
 
 **Alternative commands:**
+
 - `npm run dev:nodemon` - Use nodemon for watching
 - `npm run dev:inspect` - Start with debugger attached
 
