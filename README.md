@@ -8,6 +8,7 @@ Privacy-first, simple visitor tracking for small businesses and individuals.
 - 🔒 **Privacy First**: IP addresses are hashed immediately and never stored in plain text
 - 📊 **Just What You Need**: Track visitors, device types, locations, and custom parameters
 - 🐳 **Docker Ready**: Easy deployment with Docker and Docker Compose
+- 🛡️ **Secure by Default**: Rate limiting, input validation, and security headers included
 
 ## Quick Start with Docker
 
@@ -154,6 +155,17 @@ npm start
 - User agent strings are parsed for device info and then discarded
 - No cookies or cross-site tracking
 - Minimal data collection
+
+## Security
+
+Simple Pixel includes comprehensive security features:
+
+- **Rate Limiting**: Protects against abuse (works with Cloudflare proxy)
+- **Input Validation**: All pixel IDs are validated as proper UUIDs
+- **Security Headers**: Helmet middleware for XSS and clickjacking protection
+- **Cloudflare Ready**: Designed to work behind Cloudflare's proxy with proper IP detection
+
+See [SECURITY.md](SECURITY.md) for detailed security information and configuration options.
 
 ## Tech Stack
 
