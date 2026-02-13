@@ -53,7 +53,7 @@ const pixelCreationLimiter = rateLimit({
 
 const pixelTrackingLimiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 100,
+    max: 1000,
     keyGenerator: (req, _res) => {
         const pixelId = req.params.pixelId;
         if (typeof pixelId === 'string') {

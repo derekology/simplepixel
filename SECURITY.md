@@ -10,11 +10,10 @@ All endpoints are protected with rate limiting that works correctly behind Cloud
 
 - **Pixel Creation (`/`)**: 5 requests per minute per IP
   - Prevents abuse of the pixel generation system
-  
-- **Pixel Tracking (`/p/:pixelId.gif`)**: 100 requests per minute per pixel ID
+- **Pixel Tracking (`/p/:pixelId.gif`)**: 1000 requests per minute per pixel ID
   - Allows legitimate tracking while preventing spam
   - Rate limit is per pixel, not per IP, to accommodate real traffic
-  
+  - Suitable for landing pages with moderate traffic spikes
 - **API Endpoints (`/stats/:pixelId`, `/delete/:pixelId`)**: 20 requests per minute per IP
   - Protects against stats harvesting and deletion spam
 
@@ -64,9 +63,9 @@ You can adjust the rate limits in `src/server/server.ts`:
 
 ```typescript
 const pixelCreationLimiter = rateLimit({
-    windowMs: 60 * 1000,  // Time window in milliseconds
-    max: 5,               // Max requests per window
-    // ...
+  windowMs: 60 * 1000, // Time window in milliseconds
+  max: 5, // Max requests per window
+  // ...
 });
 ```
 
