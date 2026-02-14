@@ -57,7 +57,7 @@ If you prefer to build from source instead of using the Docker Hub image:
 - Docker 20.10+
 - Docker Compose 2.0+
 - Domain name (for SSL)
-- Reverse proxy (nginx/traefik recommended)
+- Reverse proxy (nginx recommended)
 
 ### 1. Server Preparation
 
@@ -117,7 +117,7 @@ docker compose up -d
 
 ## Reverse Proxy Setup
 
-### Option 1: Nginx
+### Nginx
 
 Create `/etc/nginx/sites-available/simplepixel`:
 
@@ -148,21 +148,6 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### Option 2: Traefik
-
-Add labels to `docker-compose.yml`:
-
-```yaml
-services:
-  simplepixel:
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.simplepixel.rule=Host(`yourdomain.com`)"
-      - "traefik.http.routers.simplepixel.entrypoints=websecure"
-      - "traefik.http.routers.simplepixel.tls.certresolver=letsencrypt"
-      - "traefik.http.services.simplepixel.loadbalancer.server.port=3000"
-```
-
 ## SSL/TLS Setup
 
 ### Using Certbot (with Nginx)
@@ -178,10 +163,6 @@ sudo certbot --nginx -d yourdomain.com
 # Test renewal
 sudo certbot renew --dry-run
 ```
-
-### Using Let's Encrypt (with Traefik)
-
-Traefik handles this automatically with the labels above.
 
 ## Database Backups
 
@@ -217,86 +198,16 @@ docker compose logs -f
 docker stats simplepixel
 ```
 
-### Advanced Monitoring
-
-Consider integrating:
-
-- **Prometheus** for metrics collection
-- **Grafana** for visualization
-- **Loki** for log aggregation
-- **Uptime Kuma** or **UptimeRobot** for uptime monitoring
-
-## Security Best Practices
-
-1. **Firewall Configuration**
-
-```bash
-sudo ufw allow 22/tcp  # SSH
-sudo ufw allow 80/tcp  # HTTP
-sudo ufw allow 443/tcp # HTTPS
-sudo ufw enable
-```
-
-2. **Keep System Updated**
-
-```bash
-# Auto-updates
-sudo apt install unattended-upgrades
-sudo dpkg-reconfigure --priority=low unattended-upgrades
-```
-
-3. **Docker Security**
-
-- Use non-root user (already configured)
-- Keep Docker updated
-- Regularly scan images: `docker scan simplepixel`
-
-4. **Rate Limiting**
-   Add to nginx configuration:
-
-```nginx
-limit_req_zone $binary_remote_addr zone=pixellimit:10m rate=10r/s;
-
-location /p/ {
-    limit_req zone=pixellimit burst=20;
-    # ... rest of config
-}
-```
-
-## Scaling
-
-### Vertical Scaling
-
-Adjust resources in `docker-compose.yml`:
-services:
-simplepixel:
-deploy:
-resources:
-limits:
-cpus: '2'
-memory: 2G
-reservations:
-cpus: '1'
-memory: 1G
-
-````
-
-### Horizontal Scaling
-
-For high traffic, consider:
-1. Multiple instances behind load balancer
-2. Shared SQLite database (volume mount)
-3. Or migrate to PostgreSQL/MySQL
-
 ## Maintenance
 
 ### Update Application
 
 **Using Docker Hub image:**
+
 ```bash
 docker compose pull
 docker compose up -d
-````
+```
 
 **From source:**
 
@@ -370,24 +281,6 @@ docker stats simplepixel
 # Restart container
 docker-compose restart
 ```
-
-## Performance Tuning
-
-1. **SQLite Optimization**
-
-- Already configured with proper pragmas
-- WAL mode enabled for better concurrency
-
-2. **Node.js Tuning**
-   Add to `docker-compose.yml`:
-
-```yaml
-environment:
-  - NODE_OPTIONS=--max-old-space-size=2048
-```
-
-3. **Nginx Caching**
-   Add static file caching in nginx config for `/frontend` path
 
 ## Compliance
 
