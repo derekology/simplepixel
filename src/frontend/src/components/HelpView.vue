@@ -85,7 +85,7 @@ function copyToClipboard(text: string) {
             <div class="step">
                 <h3>Step 1: Add Custom Parameters (Optional)</h3>
                 <p>Track additional information by adding parameters to your pixel URL. You can add up to {{ maxParams
-                }} parameters:</p>
+                    }} parameters:</p>
 
                 <div class="params-builder">
                     <div v-for="(param, index) in params" :key="index" class="param-row">
@@ -202,8 +202,9 @@ function copyToClipboard(text: string) {
             </p>
             <p class="demo-info-text">
                 Self-hosting Simple Pixel is straightforward with Docker and gives you complete control over your
-                analytics data. Instructions are available on the <a href="https://github.com/derekology/simplepixel"
-                    target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+                analytics data. Instructions are available on the <a
+                    href="https://github.com/derekology/simplepixel/blob/main/DEPLOYMENT.md" target="_blank"
+                    rel="noopener noreferrer">GitHub repository</a>.
             </p>
             <p class="demo-info-text">
                 Need help getting started? <a href="https://www.linkedin.com/in/derekology" target="_blank"
