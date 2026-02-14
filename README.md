@@ -12,7 +12,22 @@ Privacy-first, simple visitor tracking for small businesses and individuals.
 
 ## Quick Start with Docker
 
-### One-Command Start (Easiest)
+### Easiest: Pre-built Docker Image (No Clone Required!)
+
+```bash
+# Create directory
+mkdir simplepixel && cd simplepixel
+
+# Download docker-compose file
+curl -O https://raw.githubusercontent.com/derekology/simplepixel/main/docker-compose.hub.yml -o docker-compose.yml
+
+# Start (uses defaults: port 3000, 7-day expiry)
+docker compose up -d
+```
+
+Access at `http://localhost:3000` - that's it! 🎉
+
+### For Development: One-Command Start
 
 **Linux/Mac:**
 
@@ -35,13 +50,13 @@ This will automatically:
 - Start the application
 - Show you the URL to access Simple Pixel
 
-### Using Docker Compose (Recommended)
+### Building from Source
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/derekology/simple-pixel
-cd simple-pixel
+git clone https://github.com/derekology/simplepixel
+cd simplepixel
 ```
 
 2. (Optional) Configure environment variables:
@@ -64,26 +79,26 @@ docker compose up -d
 Build and run the container:
 
 ```bash
-docker build -t simple-pixel .
+docker build -t simplepixel .
 docker run -d \
   -p 3000:3000 \
-  -v simple-pixel-data:/app/data \
+  -v simplepixel-data:/app/data \
   -e PORT=3000 \
-  --name simple-pixel \
-  simple-pixel
+  --name simplepixel \
+  simplepixel
 ```
 
 **Note:** Adjust the port mapping as needed (e.g., `-p 8080:8080 -e PORT=8080`).
 
 ## Environment Variables
 
-| Variable                   | Default                     | Description                           |
-| -------------------------- | --------------------------- | ------------------------------------- |
-| `PORT`                     | `3000`                      | Server port                           |
-| `DB_PATH`                  | `/app/data/simple-pixel.db` | Database file path                    |
-| `CLEANUP_INTERVAL_MINUTES` | `60`                        | How often to check for expired pixels |
-| `PIXEL_EXPIRY_DAYS`        | `7`                         | Days until pixel expires              |
-| `NODE_ENV`                 | `production`                | Node environment                      |
+| Variable                   | Default                    | Description                           |
+| -------------------------- | -------------------------- | ------------------------------------- |
+| `PORT`                     | `3000`                     | Server port                           |
+| `DB_PATH`                  | `/app/data/simplepixel.db` | Database file path                    |
+| `CLEANUP_INTERVAL_MINUTES` | `60`                       | How often to check for expired pixels |
+| `PIXEL_EXPIRY_DAYS`        | `7`                        | Days until pixel expires              |
+| `NODE_ENV`                 | `production`               | Node environment                      |
 
 ## Local Development
 

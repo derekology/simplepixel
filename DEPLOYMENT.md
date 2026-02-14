@@ -85,7 +85,7 @@ sudo usermod -aG docker $USER
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/derekology/simplepixel.git
 cd simplepixel
 
 # Create production environment file
