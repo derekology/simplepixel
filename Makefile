@@ -26,13 +26,13 @@ restart:
 
 clean:
 	docker compose down -v
-	docker rmi simple-pixel_simple-pixel 2>/dev/null || true
+	docker rmi simplepixel_simplepixel 2>/dev/null || true
 
 shell:
-	docker compose exec simple-pixel sh
+	docker compose exec simplepixel sh
 
 stats:
-	docker stats simple-pixel
+	docker stats simplepixel
 
 ps:
 	docker compose ps
@@ -44,11 +44,11 @@ rebuild:
 
 backup-db:
 	@mkdir -p backups
-	docker cp simple-pixel:/app/data/simple-pixel.db backups/simple-pixel-$(shell date +%Y%m%d-%H%M%S).db
+	docker cp simplepixel:/app/data/simplepixel.db backups/simplepixel-$(shell date +%Y%m%d-%H%M%S).db
 	@echo "Database backed up to backups/"
 
 restore-db:
 	@if [ -z "$(FILE)" ]; then echo "Usage: make restore-db FILE=backup.db"; exit 1; fi
-	docker cp $(FILE) simple-pixel:/app/data/simple-pixel.db
+	docker cp $(FILE) simplepixel:/app/data/simplepixel.db
 	docker compose restart
 	@echo "Database restored from $(FILE)"

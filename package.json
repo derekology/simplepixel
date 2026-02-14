@@ -1,5 +1,5 @@
 {
-  "name": "simple-pixel",
+  "name": "simplepixel",
   "version": "1.0.0",
   "description": "Privacy-first, simple visitor tracking for small businesses and individuals",
   "main": "dist/server/server.js",

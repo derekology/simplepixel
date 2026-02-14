@@ -4,14 +4,60 @@
 
 This guide covers deploying Simple Pixel to a production environment using Docker.
 
-## Prerequisites
+## Quick Start (Recommended)
+
+The easiest way to deploy Simple Pixel is using the pre-built Docker image:
+
+### 1. Download docker-compose file
+
+```bash
+# Create directory
+mkdir simplepixel && cd simplepixel
+
+# Download docker-compose file
+curl -O https://raw.githubusercontent.com/derekology/simplepixel/main/docker-compose.hub.yml
+
+# Rename to docker-compose.yml
+mv docker-compose.hub.yml docker-compose.yml
+```
+
+### 2. Create environment file (optional)
+
+```bash
+cat > .env << EOF
+NODE_ENV=production
+PORT=3000
+CLEANUP_INTERVAL_MINUTES=60
+PIXEL_EXPIRY_DAYS=7
+EOF
+```
+
+### 3. Start the application
+
+```bash
+docker compose up -d
+```
+
+That's it! Simple Pixel is now running on port 3000.
+
+### 4. Verify it's working
+
+```bash
+curl http://localhost:3000/health
+```
+
+---
+
+## Alternative: Build from Source
+
+If you prefer to build from source instead of using the Docker Hub image:
+
+### Prerequisites
 
 - Docker 20.10+
 - Docker Compose 2.0+
 - Domain name (for SSL)
 - Reverse proxy (nginx/traefik recommended)
-
-## Production Environment Setup
 
 ### 1. Server Preparation
 
@@ -27,9 +73,20 @@ sudo usermod -aG docker $USER
 ### 2. Application Deployment
 
 ```bash
+sudo apt update && sudo apt upgrade -y
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+sudo usermod -aG docker $USER
+```
+
+### 2. Application Deployment
+
+```bash
 # Clone repository
 git clone <repository-url>
-cd simple-pixel
+cd simplepixel
 
 # Create production environment file
 cp .env.example .env
@@ -46,7 +103,7 @@ Edit `.env` for production:
 NODE_ENV=production
 PORT=3000
 
-DB_PATH=/app/data/simple-pixel.db
+DB_PATH=/app/data/simplepixel.db
 
 CLEANUP_INTERVAL_MINUTES=60
 PIXEL_EXPIRY_DAYS=7
@@ -62,7 +119,7 @@ docker compose up -d
 
 ### Option 1: Nginx
 
-Create `/etc/nginx/sites-available/simple-pixel`:
+Create `/etc/nginx/sites-available/simplepixel`:
 
 ```nginx
 server {
@@ -84,8 +141,9 @@ server {
 ```
 
 Enable site:
+
 ```bash
-sudo ln -s /etc/nginx/sites-available/simple-pixel /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/simplepixel /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -96,13 +154,13 @@ Add labels to `docker-compose.yml`:
 
 ```yaml
 services:
-  simple-pixel:
+  simplepixel:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.simple-pixel.rule=Host(`yourdomain.com`)"
-      - "traefik.http.routers.simple-pixel.entrypoints=websecure"
-      - "traefik.http.routers.simple-pixel.tls.certresolver=letsencrypt"
-      - "traefik.http.services.simple-pixel.loadbalancer.server.port=3000"
+      - "traefik.http.routers.simplepixel.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.simplepixel.entrypoints=websecure"
+      - "traefik.http.routers.simplepixel.tls.certresolver=letsencrypt"
+      - "traefik.http.services.simplepixel.loadbalancer.server.port=3000"
 ```
 
 ## SSL/TLS Setup
@@ -131,10 +189,10 @@ Traefik handles this automatically with the labels above.
 
 ```bash
 # Create backups directory
-mkdir -p /opt/backups/simple-pixel
+mkdir -p /opt/backups/simplepixel
 
 # Backup database
-docker cp simple-pixel:/app/data/simple-pixel.db /opt/backups/simple-pixel/backup-$(date +%Y%m%d-%H%M%S).db
+docker cp simplepixel:/app/data/simplepixel.db /opt/backups/simplepixel/backup-$(date +%Y%m%d-%H%M%S).db
 ```
 
 ### Automated Backups (Cron)
@@ -144,7 +202,7 @@ docker cp simple-pixel:/app/data/simple-pixel.db /opt/backups/simple-pixel/backu
 crontab -e
 
 # Add daily backup at 2 AM
-0 2 * * * docker cp simple-pixel:/app/data/simple-pixel.db /opt/backups/simple-pixel/backup-$(date +\%Y\%m\%d-\%H\%M\%S).db && find /opt/backups/simple-pixel -type f -mtime +30 -delete
+0 2 * * * docker cp simplepixel:/app/data/simplepixel.db /opt/backups/simplepixel/backup-$(date +\%Y\%m\%d-\%H\%M\%S).db && find /opt/backups/simplepixel -type f -mtime +30 -delete
 ```
 
 ## Monitoring
@@ -156,12 +214,13 @@ docker compose ps
 
 docker compose logs -f
 
-docker stats simple-pixel
+docker stats simplepixel
 ```
 
 ### Advanced Monitoring
 
 Consider integrating:
+
 - **Prometheus** for metrics collection
 - **Grafana** for visualization
 - **Loki** for log aggregation
@@ -170,6 +229,7 @@ Consider integrating:
 ## Security Best Practices
 
 1. **Firewall Configuration**
+
 ```bash
 sudo ufw allow 22/tcp  # SSH
 sudo ufw allow 80/tcp  # HTTP
@@ -178,6 +238,7 @@ sudo ufw enable
 ```
 
 2. **Keep System Updated**
+
 ```bash
 # Auto-updates
 sudo apt install unattended-upgrades
@@ -185,12 +246,14 @@ sudo dpkg-reconfigure --priority=low unattended-upgrades
 ```
 
 3. **Docker Security**
+
 - Use non-root user (already configured)
 - Keep Docker updated
-- Regularly scan images: `docker scan simple-pixel`
+- Regularly scan images: `docker scan simplepixel`
 
 4. **Rate Limiting**
-Add to nginx configuration:
+   Add to nginx configuration:
+
 ```nginx
 limit_req_zone $binary_remote_addr zone=pixellimit:10m rate=10r/s;
 
@@ -206,16 +269,17 @@ location /p/ {
 
 Adjust resources in `docker-compose.yml`:
 services:
-  simple-pixel:
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-        reservations:
-          cpus: '1'
-          memory: 1G
-```
+simplepixel:
+deploy:
+resources:
+limits:
+cpus: '2'
+memory: 2G
+reservations:
+cpus: '1'
+memory: 1G
+
+````
 
 ### Horizontal Scaling
 
@@ -227,6 +291,14 @@ For high traffic, consider:
 ## Maintenance
 
 ### Update Application
+
+**Using Docker Hub image:**
+```bash
+docker compose pull
+docker compose up -d
+````
+
+**From source:**
 
 ```bash
 git pull
@@ -281,7 +353,7 @@ docker info
 
 ```bash
 # Access container shell
-docker-compose exec simple-pixel sh
+docker-compose exec simplepixel sh
 
 # Check database location
 ls -la /app/data/
@@ -293,7 +365,7 @@ ls -la /app/data/
 
 ```bash
 # Check stats
-docker stats simple-pixel
+docker stats simplepixel
 
 # Restart container
 docker-compose restart
@@ -302,27 +374,31 @@ docker-compose restart
 ## Performance Tuning
 
 1. **SQLite Optimization**
+
 - Already configured with proper pragmas
 - WAL mode enabled for better concurrency
 
 2. **Node.js Tuning**
-Add to `docker-compose.yml`:
+   Add to `docker-compose.yml`:
+
 ```yaml
 environment:
   - NODE_OPTIONS=--max-old-space-size=2048
 ```
 
 3. **Nginx Caching**
-Add static file caching in nginx config for `/frontend` path
+   Add static file caching in nginx config for `/frontend` path
 
 ## Compliance
 
 Ensure you comply with:
+
 - **GDPR** (EU)
 - **CCPA** (California)
 - **Other regional privacy laws**
 
 Requirements:
+
 - Privacy policy
 - Cookie consent (if using cookies beyond tracking pixel)
 - Data retention policy
@@ -331,6 +407,7 @@ Requirements:
 ## Support
 
 For issues or questions:
+
 - Check logs: `docker compose logs`
 - Review documentation: `README.md`, `DOCKER_SETUP.md`
 - Check GitHub issues

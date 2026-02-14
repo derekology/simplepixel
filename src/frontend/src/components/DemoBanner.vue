@@ -4,7 +4,7 @@
       <span class="demo-icon">⚠️</span>
       <span class="demo-text">
         While this demo is usually fully functional, we recommend you
-        <a href="https://github.com/derekology/simple-pixel" target="_blank" rel="noopener noreferrer">host your own
+        <a href="https://github.com/derekology/simplepixel" target="_blank" rel="noopener noreferrer">host your own
           instance</a>.
       </span>
     </div>

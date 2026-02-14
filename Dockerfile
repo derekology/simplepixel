@@ -49,7 +49,7 @@ USER nodejs
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    DB_PATH=/app/data/simple-pixel.db \
+    DB_PATH=/app/data/simplepixel.db \
     CLEANUP_INTERVAL_MINUTES=60 \
     PIXEL_EXPIRY_DAYS=7
 

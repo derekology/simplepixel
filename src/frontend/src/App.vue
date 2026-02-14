@@ -94,7 +94,7 @@ function navigateToNewPixel() {
 }
 
 function goToWebsite() {
-  window.open('https://derekw.co/?utm_medium=referral&utm_source=simple-pixel', '_blank');
+  window.open('https://derekw.co/?utm_medium=referral&utm_source=simplepixel', '_blank');
 }
 
 function escapeCSVValue(value: string): string {
@@ -193,7 +193,7 @@ function exportToCSV() {
   buildEventCSV(csvLines);
 
   const csvContent = csvLines.join('\n');
-  const filename = `simple-pixel-${pixelId}-${Date.now()}.csv`;
+  const filename = `simplepixel-${pixelId}-${Date.now()}.csv`;
   downloadCSV(csvContent, filename);
 }
 

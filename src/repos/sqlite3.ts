@@ -8,7 +8,7 @@ import type { IPixel, IPixelEvent, IPixelRepository } from "../types/types.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const dbPath = process.env.DB_PATH || path.join(__dirname, "../data/simple-pixel.db");
+const dbPath = process.env.DB_PATH || path.join(__dirname, "../data/simplepixel.db");
 
 const dbDir = path.dirname(dbPath);
 if (!fs.existsSync(dbDir)) {

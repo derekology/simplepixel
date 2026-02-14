@@ -1,8 +1,6 @@
 services:
   simplepixel:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: derekology/simplepixel:latest
     container_name: simplepixel
     restart: unless-stopped
     ports:
